@@ -44,7 +44,7 @@ export const Header: React.FC<GridProps> = ({
   }
 
   return (
-    <HeaderRow>
+    <HeaderRow rowHeight={config.rowHeight}>
       <Row>
         <AutoSizer disableHeight>
           {({ width }) => (
@@ -65,7 +65,7 @@ export const Header: React.FC<GridProps> = ({
           )}
         </AutoSizer>
       </Row>
-      {!pinned && <Spacer />}
+      {!pinned && <Spacer rowHeight={config.rowHeight} />}
     </HeaderRow>
   )
 }

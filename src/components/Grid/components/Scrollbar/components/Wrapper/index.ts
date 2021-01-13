@@ -14,7 +14,7 @@ export const Wrapper = styled.div<Props>`
       : `-1px 0 0 0 ${theme.borderColorPinned}`};
   z-index: 0;
 
-  ${({ horizontal, corner, pinned, theme }) => {
+  ${({ horizontal, corner, pinned, theme, rowHeight }) => {
     if (horizontal && corner) {
       return `
         border-right: 1px solid ${theme.borderColorPinned}
@@ -25,8 +25,8 @@ export const Wrapper = styled.div<Props>`
       `
     } else if (pinned) {
       return `
-        margin-top: -30px;
-        height: calc(100% + 30px);
+        margin-top: -${rowHeight}px;
+        height: calc(100% + ${rowHeight}px);
       `
     }
     return false

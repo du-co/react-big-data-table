@@ -6,4 +6,5 @@ export interface Props {
   scrollTop?: number
   gridRef?: any
   updateScroll?: (_: number) => void
+  rowHeight?: number
 }

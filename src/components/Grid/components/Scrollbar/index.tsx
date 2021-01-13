@@ -2,6 +2,7 @@ import React, { useRef } from 'react'
 import { useScrollbar } from './hooks'
 import { Props } from './types'
 import { Wrapper, Container, Handle } from './components'
+import { useTable } from '../../../../context'
 
 export const Scrollbar: React.FC<Props> = ({
   pinned,
@@ -13,6 +14,7 @@ export const Scrollbar: React.FC<Props> = ({
   updateScroll,
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null)
+  const { config } = useTable()
 
   const { shouldScroll, scrollBarHandle, initializeScroll } = useScrollbar({
     gridRef,
@@ -24,7 +26,12 @@ export const Scrollbar: React.FC<Props> = ({
   })
 
   return (
-    <Wrapper horizontal={horizontal} corner={corner} pinned={pinned}>
+    <Wrapper
+      horizontal={horizontal}
+      corner={corner}
+      pinned={pinned}
+      rowHeight={config.rowHeight}
+    >
       <Container ref={scrollRef}>
         {shouldScroll && (
           <Handle

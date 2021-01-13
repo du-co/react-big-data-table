@@ -1,6 +1,10 @@
 import styled from 'styled-components'
 
-export const Spacer = styled.div`
+interface Props {
+  rowHeight: number
+}
+
+export const Spacer = styled.div<Props>`
   width: 16px;
-  height: 30px;
+  height: ${({ rowHeight }) => rowHeight}px;
 `
