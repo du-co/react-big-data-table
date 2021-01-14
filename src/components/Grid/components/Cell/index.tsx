@@ -13,22 +13,42 @@ const Wrapper = styled.div`
 interface Props {
   style: any
   rowId: ID
-  pinned?: boolean
+  columnId: ID
+  pinnedRow?: boolean
+  pinnedColumn?: boolean
 }
 
-export const Cell: React.FC<Props> = ({ children, style, rowId, pinned }) => {
+export const Cell: React.FC<Props> = ({
+  children,
+  style,
+  rowId,
+  columnId,
+  pinnedRow,
+  pinnedColumn,
+}) => {
   const { onContextMenu, triggerMenuAction, view } = useTable()
 
   const menuItems = (
-    <>
-      <button
-        onClick={triggerMenuAction(() =>
-          pinned ? view.unpinRow(rowId) : view.pinRow(rowId)
-        )}
-      >
-        {pinned ? 'Unpin' : 'Pin'} row
-      </button>
-    </>
+    <div>
+      <div>
+        <button
+          onClick={triggerMenuAction(() =>
+            pinnedRow ? view.unpinRow(rowId) : view.pinRow(rowId)
+          )}
+        >
+          {pinnedRow ? 'Unpin' : 'Pin'} row
+        </button>
+      </div>
+      <div>
+        <button
+          onClick={triggerMenuAction(() =>
+            pinnedColumn ? view.unpinColumn(columnId) : view.pinColumn(columnId)
+          )}
+        >
+          {pinnedColumn ? 'Unpin' : 'Pin'} column
+        </button>
+      </div>
+    </div>
   )
 
   return (
