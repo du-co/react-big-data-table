@@ -1,4 +1,5 @@
 export default {
+  primaryColor: '#007bff',
   borderColor: '#e2e3e3',
   borderColorPinned: '#ccc',
   borderWidth: 1,

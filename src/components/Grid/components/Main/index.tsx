@@ -53,37 +53,16 @@ export const Main: React.FC<GridProps> = ({
   }
 
   const handleScrollbarX = (position: number) => {
-    pinned
-      ? updateScroll({
-          ...scroll,
-          pinned: {
-            default: {
-              left: position,
-            },
-          },
-        })
-      : updateScroll({
-          ...scroll,
-          main: {
-            ...scroll.main,
-            default: {
-              ...scroll.main.default,
-              left: position,
-            },
-          },
-        })
+    innerRef.current.handleScrollEvent({
+      scrollLeft: position,
+      scrollTop: scroll.main.default.top,
+    })
   }
 
   const handleScrollbarY = (position: number) => {
-    updateScroll({
-      ...scroll,
-      main: {
-        ...scroll.main,
-        default: {
-          ...scroll.main.default,
-          top: position,
-        },
-      },
+    innerRef.current.handleScrollEvent({
+      scrollLeft: scroll.main.default.left,
+      scrollTop: position,
     })
   }
 
@@ -94,19 +73,18 @@ export const Main: React.FC<GridProps> = ({
           <AutoSizer>
             {({ width, height }) => (
               <Grid
-                isScrollingOptOut
-                tabIndex={-1}
-                ref={innerRef}
-                scrollLeft={scrollX}
-                scrollTop={scroll.main.default.top}
-                width={width}
-                height={height}
-                rowHeight={config.rowHeight}
-                rowCount={data.rows.length}
+                cellRenderer={cellRenderer}
                 columnCount={columns.length}
                 columnWidth={config.defaultColumnWidth}
-                cellRenderer={cellRenderer}
+                height={height}
                 onScroll={onScroll}
+                ref={innerRef}
+                rowCount={data.rows.length}
+                rowHeight={config.rowHeight}
+                scrollLeft={scrollX}
+                scrollTop={scroll.main.default.top}
+                tabIndex={-1}
+                width={width}
               />
             )}
           </AutoSizer>

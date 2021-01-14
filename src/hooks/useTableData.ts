@@ -9,7 +9,7 @@ interface Props {
   columnOrder: ID[]
 }
 
-const useTableData = ({
+export const useTableData = ({
   data,
   pinnedRows,
   pinnedColumns,
@@ -42,5 +42,3 @@ const useTableData = ({
     columns: columnData,
   }
 }
-
-export default useTableData

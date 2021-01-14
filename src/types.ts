@@ -1,4 +1,5 @@
 export type ID = number | string
+export type ViewAction = (_: ID) => void
 
 export interface ColumnData {
   id: ID
@@ -27,6 +28,10 @@ export interface BigDataTableView {
   columnSizes: {
     [key in ID]: number
   }
+  pinColumn: ViewAction
+  unpinColumn: ViewAction
+  pinRow: ViewAction
+  unpinRow: ViewAction
 }
 
 export interface BigDataTableTransformedData {

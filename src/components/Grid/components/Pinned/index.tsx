@@ -55,14 +55,9 @@ export const Pinned: React.FC<GridProps> = ({
   }
 
   const handleScrollbar = (position: number) => {
-    updateScroll({
-      ...scroll,
-      main: {
-        ...scroll.main,
-        pinned: {
-          top: position,
-        },
-      },
+    innerRef.current.handleScrollEvent({
+      scrollLeft: scroll.main.default.left,
+      scrollTop: position,
     })
   }
 
@@ -76,7 +71,6 @@ export const Pinned: React.FC<GridProps> = ({
               columnCount={columns.length}
               columnWidth={config.defaultColumnWidth}
               height={height}
-              isScrollingOptOut
               onScroll={onScroll}
               ref={innerRef}
               rowCount={view.pinnedRows.length}

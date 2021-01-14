@@ -22,16 +22,26 @@ export interface ContextProps {
   config: ContextConfig
   scroll: ScrollState
   updateScroll: (_state: ScrollState) => void
+  onContextMenu: (_children: any) => (e: any) => void
+  triggerMenuAction: (_action: any) => () => void
 }
+
+const defaultViewAction = () => {}
 
 const context = createContext<ContextProps>({
   scroll: DEFAULT_SCROLL_STATE,
-  updateScroll: () => {},
+  updateScroll: defaultViewAction,
+  onContextMenu: () => () => {},
+  triggerMenuAction: () => () => {},
   view: {
     pinnedColumns: [],
     pinnedRows: [],
     columnOrder: [],
     columnSizes: {},
+    pinColumn: defaultViewAction,
+    unpinColumn: defaultViewAction,
+    pinRow: defaultViewAction,
+    unpinRow: defaultViewAction,
   },
   data: {
     pinnedColumns: [],
@@ -42,8 +52,8 @@ const context = createContext<ContextProps>({
   config: {
     disablePinnedColumns: false,
     disablePinnedRows: false,
-    onSelectionChange: () => {},
-    onSelectionAllChange: () => {},
+    onSelectionChange: defaultViewAction,
+    onSelectionAllChange: defaultViewAction,
     defaultColumnWidth: DEFAULT_COLUMN_WIDTH,
     rowHeight: DEFAULT_ROW_HEIGHT,
   },

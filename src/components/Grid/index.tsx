@@ -13,7 +13,7 @@ export const Grid: React.FC<Props> = ({ pinned }) => {
   const pinnedGrid = useRef(null)
   const columns = pinned ? data.pinnedColumns : data.columns
 
-  const mainScrollLeft = pinned
+  const scrollLeft = pinned
     ? scroll.pinned.default.left
     : scroll.main.default.left
 
@@ -34,21 +34,21 @@ export const Grid: React.FC<Props> = ({ pinned }) => {
           columns={columns}
           innerRef={headerGrid}
           pinned={pinned}
-          scrollX={mainScrollLeft}
+          scrollX={scrollLeft}
         />
         {!config.disablePinnedRows && view.pinnedRows.length > 0 && (
           <Pinned
             columns={columns}
             innerRef={pinnedGrid}
             pinned={pinned}
-            scrollX={mainScrollLeft}
+            scrollX={scrollLeft}
           />
         )}
         <Main
           columns={columns}
           innerRef={mainGrid}
           pinned={pinned}
-          scrollX={mainScrollLeft}
+          scrollX={scrollLeft}
         />
       </Column>
     </Row>

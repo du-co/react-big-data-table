@@ -1,67 +1,58 @@
-import React, { useEffect, useRef, useState, FC, MouseEvent } from 'react'
-import styled from 'styled-components'
-
-export interface MenuProps {
-  className?: string
-  visible?: boolean
-  x?: number
-  y?: number
-}
-
-const Menu = styled.div<MenuProps>`
-  position: fixed;
-  ${({ x, y }) => `
-    top: ${y}px;
-    left: ${x}px;
-  `}
-`
+import { useEffect, useRef, useState, MouseEvent } from 'react'
 
 export const useContextMenu = () => {
-  const ActiveRef = useRef<EventTarget>((null as unknown) as EventTarget)
+  const menuRef = useRef<HTMLDivElement>((null as unknown) as HTMLDivElement)
+  const activeRef = useRef<EventTarget>((null as unknown) as EventTarget)
+  const [children, setChildren] = useState(null)
   const [state, setState] = useState({
     visible: false,
     x: 0,
     y: 0,
   })
 
-  const closeMenu = (e: any) => {
-    if (e && ActiveRef.current && ActiveRef.current !== e.target) {
+  const onContextMenu = (children: any) => (e: MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    activeRef.current = e.target
+    setState({
+      visible: true,
+      x: e.clientX,
+      y: e.clientY,
+    })
+    setChildren(children)
+  }
+
+  const closeMenu = (e?: any) => {
+    if (!e || (menuRef.current && !menuRef.current.contains(e.target))) {
       setState({
         ...state,
         visible: false,
       })
+      setChildren(null)
     }
   }
 
-  const onContextMenuHandler = (e: MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    ActiveRef.current = e.target
-    setState({
-      x: e.clientX,
-      y: e.clientY,
-      visible: true,
-    })
+  const triggerMenuAction = (action: any) => () => {
+    action()
+    closeMenu()
   }
 
   useEffect(() => {
-    document.addEventListener('click', closeMenu)
+    window.addEventListener('blur', closeMenu)
+    document.addEventListener('mousedown', closeMenu)
     document.addEventListener('contextmenu', closeMenu)
     return () => {
-      document.removeEventListener('click', closeMenu)
+      window.removeEventListener('blur', closeMenu)
+      document.removeEventListener('mousedown', closeMenu)
       document.removeEventListener('contextmenu', closeMenu)
     }
   }, [])
 
-  const ContextMenu: FC<MenuProps> = ({ className, children }) =>
-    state.visible ? (
-      <Menu {...state} className={className}>
-        {children}
-      </Menu>
-    ) : null
-
   return {
-    ContextMenu,
-    onContextMenuHandler,
+    triggerMenuAction,
+    onContextMenu,
+    menuState: state,
+    menuRef,
+    menuChildren: children,
   }
 }

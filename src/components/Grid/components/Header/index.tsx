@@ -18,11 +18,19 @@ export const Header: React.FC<GridProps> = ({
   const { config, scroll, updateScroll } = useTable()
   const keyPrefix = pinned ? 'pinned' : 'main'
 
-  const cellRenderer: GridCellRenderer = ({ style, columnIndex }) => (
-    <HeaderCell style={style} key={`${keyPrefix}-header-${columnIndex}`}>
-      {columns[columnIndex].key}
-    </HeaderCell>
-  )
+  const cellRenderer: GridCellRenderer = ({ style, columnIndex }) => {
+    const column = columns[columnIndex]
+    return (
+      <HeaderCell
+        style={style}
+        key={`${keyPrefix}-header-${columnIndex}`}
+        pinned={pinned}
+        columnId={column.id}
+      >
+        {column.key}
+      </HeaderCell>
+    )
+  }
 
   const onScroll = ({ scrollLeft }: OnScrollParams) => {
     if (scrollLeft === scrollX) return
@@ -53,7 +61,6 @@ export const Header: React.FC<GridProps> = ({
               columnCount={columns.length}
               columnWidth={config.defaultColumnWidth}
               height={config.rowHeight}
-              isScrollingOptOut
               onScroll={onScroll}
               ref={innerRef}
               rowCount={1}

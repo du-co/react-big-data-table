@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { ThemeProvider } from 'styled-components'
-import { Wrapper, Grid } from './components'
+import { Wrapper, Grid, ContextMenu } from './components'
 
 import { Provider } from './context'
-import useTableData from './hooks/useTableData'
+import { useTableData, usePinnedColumns, usePinnedRows } from './hooks'
 import { BigDataTableProps } from './types'
 import defaultTheme from './theme'
 import {
@@ -11,6 +11,7 @@ import {
   DEFAULT_COLUMN_WIDTH,
   DEFAULT_ROW_HEIGHT,
 } from './consts'
+import { useContextMenu } from './hooks/useContextMenu'
 
 const rowData = (rowId: number) =>
   Array.from(Array(100)).map((_, i) => ({
@@ -36,8 +37,15 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
   rowHeight = DEFAULT_ROW_HEIGHT,
   ...config
 }) => {
-  const pinnedColumns = [1, 7, 3, 5, 6, 8, 9, 10, 11]
-  const pinnedRows = [2, 8, 4, 6, 9, 39, 49, 59, 69, 79, 84, 26]
+  const {
+    menuChildren,
+    menuState,
+    menuRef,
+    onContextMenu,
+    triggerMenuAction,
+  } = useContextMenu()
+  const { pinnedColumns, pinColumn, unpinColumn } = usePinnedColumns()
+  const { pinnedRows, pinRow, unpinRow } = usePinnedRows()
   const columnOrder = data.columns.map((c) => c.id).reverse()
 
   const transformedData = useTableData({
@@ -54,11 +62,17 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
       value={{
         scroll,
         updateScroll,
+        onContextMenu,
+        triggerMenuAction,
         view: {
           pinnedColumns,
           pinnedRows,
           columnOrder,
           columnSizes: {},
+          pinColumn,
+          unpinColumn,
+          pinRow,
+          unpinRow,
         },
         data: transformedData,
         config: {
@@ -75,9 +89,14 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
         }}
       >
         <Wrapper>
-          {!config.disablePinnedColumns && <Grid pinned />}
+          {!config.disablePinnedColumns && pinnedColumns.length > 0 && (
+            <Grid pinned />
+          )}
           <Grid />
         </Wrapper>
+        <ContextMenu menuState={menuState} innerRef={menuRef}>
+          {menuChildren}
+        </ContextMenu>
       </ThemeProvider>
     </Provider>
   )
