@@ -23,13 +23,19 @@ export const useContextMenu = () => {
   }
 
   const closeMenu = (e?: any) => {
-    if (!e || (menuRef.current && !menuRef.current.contains(e.target))) {
-      setState({
-        ...state,
-        visible: false,
-      })
-      setChildren(null)
+    if (e) {
+      if (
+        (e.type === 'contextmenu' && e.target === activeRef.current) ||
+        (menuRef.current && menuRef.current.contains(e.target))
+      ) {
+        return
+      }
     }
+    setState({
+      ...state,
+      visible: false,
+    })
+    setChildren(null)
   }
 
   const triggerMenuAction = (action: any) => () => {

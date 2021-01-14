@@ -25,7 +25,6 @@ const Menu = styled.div<MenuProps>`
     left: ${x}px;
     font-family: ${theme.fontFamily};
     font-size: ${theme.fontSize}px;
-    max-height: calc(100vh - ${y * 2}px);
   `};
 `
 

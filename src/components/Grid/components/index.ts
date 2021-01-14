@@ -1,6 +1,7 @@
 export * from './Cell'
 export * from './Column'
 export * from './Header'
+export * from './HeaderCell'
 export * from './HeaderRow'
 export * from './Main'
 export * from './Pinned'

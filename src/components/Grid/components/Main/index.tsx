@@ -25,8 +25,10 @@ export const Main: React.FC<GridProps> = ({
     const cell = utils.find(row.columns, column.id, 'columnId')
     return (
       <Cell
-        style={style}
         key={`${keyPrefix}-pinned-${columnIndex}-${rowIndex}`}
+        pinned={pinned}
+        rowId={row.id}
+        style={style}
       >
         {cell.data}
       </Cell>
