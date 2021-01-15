@@ -16,7 +16,7 @@ export const Main: React.FC<GridProps> = ({
   pinned,
   scrollX,
 }) => {
-  const { config, data, scroll, updateScroll } = useTable()
+  const { config, data, scroll, updateScroll, view } = useTable()
   const keyPrefix = pinned ? 'pinned' : 'main'
 
   const cellRenderer: GridCellRenderer = ({ style, columnIndex, rowIndex }) => {
@@ -97,6 +97,7 @@ export const Main: React.FC<GridProps> = ({
           <Scrollbar
             corner
             gridRef={innerRef}
+            pullUp={!pinned && view.pinnedRows.length === 0}
             scrollTop={scroll.main.default.top}
             updateScroll={handleScrollbarY}
           />

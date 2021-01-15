@@ -38,10 +38,8 @@ const context = createContext<ContextProps>({
     pinnedRows: [],
     columnOrder: [],
     columnSizes: {},
-    pinColumn: defaultViewAction,
-    unpinColumn: defaultViewAction,
-    pinRow: defaultViewAction,
-    unpinRow: defaultViewAction,
+    pinColumn: () => defaultViewAction,
+    pinRow: () => defaultViewAction,
   },
   data: {
     pinnedColumns: [],

@@ -73,7 +73,7 @@ export const useScrollbar = ({
 
   const shouldScroll = horizontal
     ? scrollBarHandle.width < scrollBarContainer.width
-    : scrollBarHandle.height < scrollBarContainer.height
+    : scrollBarHandle.height < scrollBarContainer.height - 1
 
   const scrollbar = useRef({
     start: 0,

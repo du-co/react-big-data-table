@@ -44,8 +44,8 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
     onContextMenu,
     triggerMenuAction,
   } = useContextMenu()
-  const { pinnedColumns, pinColumn, unpinColumn } = usePinnedColumns()
-  const { pinnedRows, pinRow, unpinRow } = usePinnedRows()
+  const { pinnedColumns, pinColumn } = usePinnedColumns()
+  const { pinnedRows, pinRow } = usePinnedRows()
   const columnOrder = data.columns.map((c) => c.id).reverse()
 
   const transformedData = useTableData({
@@ -70,9 +70,7 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
           columnOrder,
           columnSizes: {},
           pinColumn,
-          unpinColumn,
           pinRow,
-          unpinRow,
         },
         data: transformedData,
         config: {

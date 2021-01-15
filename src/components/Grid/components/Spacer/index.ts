@@ -5,6 +5,8 @@ interface Props {
 }
 
 export const Spacer = styled.div<Props>`
-  width: 16px;
+  width: 13px;
   height: ${({ rowHeight }) => rowHeight}px;
+  background: ${({ theme }) => theme.backgroundHeader};
+  border-left: 1px solid ${({ theme }) => theme.borderColor};
 `

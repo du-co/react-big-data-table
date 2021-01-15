@@ -15,17 +15,25 @@ interface ContextMenuProps {
 
 const Menu = styled.div<MenuProps>`
   position: fixed;
+  padding: 0.5em 0;
   z-index: 100;
   background: white;
   border-radius: 4px;
   box-shadow: 0 2px 6px 2px rgba(0, 0, 0, 0.15);
   overflow: auto;
+  min-width: 200px;
   ${({ x, y, theme }) => `
     top: ${y}px;
     left: ${x}px;
     font-family: ${theme.fontFamily};
     font-size: ${theme.fontSize}px;
   `};
+`
+
+const Wrapper = styled.ul`
+  margin: 0;
+  padding: 0;
+  list-style: none;
 `
 
 export const ContextMenu: React.FC<ContextMenuProps> = ({
@@ -36,7 +44,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
   menuState.visible
     ? createPortal(
         <Menu {...menuState} ref={innerRef}>
-          {children}
+          <Wrapper>{children}</Wrapper>
         </Menu>,
         document.body
       )

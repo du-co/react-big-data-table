@@ -16,14 +16,14 @@ export const useContextMenu = () => {
     activeRef.current = e.target
     setState({
       visible: true,
-      x: e.clientX,
-      y: e.clientY,
+      x: e.clientX - 10,
+      y: e.clientY - 15,
     })
     setChildren(children)
   }
 
   const closeMenu = (e?: any) => {
-    if (e) {
+    if (e && e.target !== window) {
       if (
         (e.type === 'contextmenu' && e.target === activeRef.current) ||
         (menuRef.current && menuRef.current.contains(e.target))

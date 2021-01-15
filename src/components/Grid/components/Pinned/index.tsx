@@ -89,6 +89,7 @@ export const Pinned: React.FC<GridProps> = ({
       </Row>
       {!pinned && (
         <Scrollbar
+          pullUp
           gridRef={innerRef}
           pinned
           scrollTop={scroll.main.pinned.top}

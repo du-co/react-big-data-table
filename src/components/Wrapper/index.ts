@@ -10,6 +10,7 @@ export const Wrapper = styled.div`
   overflow: hidden;
   font-family: ${({ theme }) => theme.fontFamily};
   font-size: ${({ theme }) => theme.fontSize}px;
+  line-height: ${({ theme }) => theme.fontSize / 10};
   &:after {
     content: '';
     position: absolute;
@@ -20,6 +21,6 @@ export const Wrapper = styled.div`
     box-sizing: border-box;
     pointer-events: none;
     border: ${({ theme }) =>
-      `${theme.borderWidth}px solid ${theme.borderColorPinned}`};
+      `${theme.borderWidth}px solid ${theme.borderColorHeader}`};
   }
 `

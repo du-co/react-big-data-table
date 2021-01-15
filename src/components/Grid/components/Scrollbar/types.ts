@@ -7,4 +7,5 @@ export interface Props {
   gridRef?: any
   updateScroll?: (_: number) => void
   rowHeight?: number
+  pullUp?: boolean
 }
