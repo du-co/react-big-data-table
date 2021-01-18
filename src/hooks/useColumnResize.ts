@@ -8,6 +8,7 @@ const initialRef = {
   start: 0,
   columnId: 0,
   diff: 0,
+  offset: 0,
 }
 
 interface Resizer {
@@ -16,9 +17,10 @@ interface Resizer {
   start: number
   columnId: ID
   diff: number
+  offset: number
 }
 
-export const useColumnResize = (initialSizes = {}) => {
+export const useColumnResize = (wrapperRef: any, initialSizes = {}) => {
   const resizer = useRef<Resizer>(initialRef)
   const resizeIndicator = useRef<HTMLDivElement>(null)
   const [columnSizes, updateColumnSizes] = useState(initialSizes)
@@ -48,7 +50,7 @@ export const useColumnResize = (initialSizes = {}) => {
     if (resizeIndicator.current) {
       const offset = resizer.current.handle.getBoundingClientRect()
       resizeIndicator.current.style.transform = `translateX(${
-        offset.left + Math.floor(offset.width / 2)
+        offset.left - resizer.current.offset + 2
       }px)`
     }
   }
@@ -73,11 +75,12 @@ export const useColumnResize = (initialSizes = {}) => {
       width: (<HTMLDivElement>handle.parentNode).offsetWidth,
       start: e.clientX,
       columnId,
+      offset: wrapperRef.current.getBoundingClientRect().left,
     }
     if (resizeIndicator.current) {
       const offset = handle.getBoundingClientRect()
       resizeIndicator.current.style.transform = `translateX(${
-        offset.left + Math.floor(offset.width / 2)
+        offset.left - resizer.current.offset + 2
       }px)`
       resizeIndicator.current.classList.add('isMoving')
     }

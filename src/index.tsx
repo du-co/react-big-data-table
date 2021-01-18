@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { ThemeProvider } from 'styled-components'
 import { Wrapper, Grid, ContextMenu, ResizeIndicator } from './components'
 
@@ -8,6 +8,7 @@ import {
   usePinnedColumns,
   usePinnedRows,
   useColumnResize,
+  useColumnReorder,
 } from './hooks'
 import { BigDataTableProps, HoverState } from './types'
 import defaultTheme from './theme'
@@ -53,10 +54,19 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
     row: null,
     column: null,
   })
-  const { pinnedColumns, pinColumn } = usePinnedColumns()
+
+  const wrapperRef = useRef<HTMLDivElement>((null as unknown) as HTMLDivElement)
+  const { pinnedColumns, pinColumn, updatePinnedColumns } = usePinnedColumns()
   const { pinnedRows, pinRow } = usePinnedRows()
-  const { initializeResize, columnSizes, resizeIndicator } = useColumnResize()
+  const { initializeResize, columnSizes, resizeIndicator } = useColumnResize(
+    wrapperRef
+  )
   const columnOrder = data.columns.map((c) => c.id).reverse()
+  const { initializeReorder } = useColumnReorder(
+    columnOrder,
+    pinnedColumns,
+    updatePinnedColumns
+  )
 
   const transformedData = useTableData({
     data,
@@ -105,7 +115,7 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
           ...theme,
         }}
       >
-        <Wrapper>
+        <Wrapper ref={wrapperRef}>
           {!config.disablePinnedColumns && pinnedColumns.length > 0 && (
             <Grid pinned />
           )}

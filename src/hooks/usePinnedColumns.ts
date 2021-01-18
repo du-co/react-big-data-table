@@ -14,5 +14,6 @@ export const usePinnedColumns = (defaultPinnedColumns: ID[] = []) => {
   return {
     pinnedColumns,
     pinColumn,
+    updatePinnedColumns,
   }
 }

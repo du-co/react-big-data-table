@@ -1,3 +1,4 @@
+export * from './useColumnReorder'
 export * from './useColumnResize'
 export * from './usePinnedColumns'
 export * from './usePinnedRows'
