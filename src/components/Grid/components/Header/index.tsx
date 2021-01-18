@@ -14,6 +14,7 @@ export const Header: React.FC<GridProps> = ({
   innerRef,
   pinned,
   scrollX,
+  calculateColumnWidth,
 }) => {
   const { config, scroll, updateScroll } = useTable()
   const keyPrefix = pinned ? 'pinned' : 'main'
@@ -59,7 +60,7 @@ export const Header: React.FC<GridProps> = ({
             <Grid
               cellRenderer={cellRenderer}
               columnCount={columns.length}
-              columnWidth={config.defaultColumnWidth}
+              columnWidth={calculateColumnWidth}
               height={config.rowHeight}
               onScroll={onScroll}
               ref={innerRef}

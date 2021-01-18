@@ -1,5 +1,6 @@
 export const DEFAULT_ROW_HEIGHT = 30
 export const DEFAULT_COLUMN_WIDTH = 150
+export const MIN_COLUMN_WIDTH = 100
 export const DEFAULT_SCROLL_STATE = {
   main: {
     default: {

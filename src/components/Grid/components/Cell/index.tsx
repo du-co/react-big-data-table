@@ -15,10 +15,14 @@ const Wrapper = styled.div<WrapperProps>`
   border-top: none;
   background: ${({ theme, hovered }) =>
     hovered ? theme.backgroundMenuItem : 'transparent'};
+
+  .resizing & {
+    pointer-events: none;
+  }
 `
 
 interface Props {
-  style: any
+  style: React.CSSProperties
   rowId: ID
   columnId: ID
   pinnedRow?: boolean
@@ -38,11 +42,11 @@ export const Cell: React.FC<Props> = ({
   const menuItems = [
     <MenuItem
       key={`pin-row-${rowId}-${columnId}`}
-      onClick={view.pinRow(rowId, !pinnedRow)}
+      onClick={view.pin.row(rowId, !pinnedRow)}
       text={pinnedRow ? 'Unpin row' : 'Pin row'}
     />,
     <MenuItem
-      onClick={view.pinColumn(columnId, !pinnedColumn)}
+      onClick={view.pin.column(columnId, !pinnedColumn)}
       text={pinnedColumn ? 'Unpin column' : 'Pin column'}
       key={`pin-column-${rowId}-${columnId}`}
     />,

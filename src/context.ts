@@ -8,6 +8,7 @@ import {
   BigDataTableProps,
   BigDataTableTransformedData,
   BigDataTableView,
+  HoverState,
   ID,
   ScrollState,
 } from './types'
@@ -30,7 +31,7 @@ export interface ContextProps {
   hovered: {
     row: ID | null
     column: ID | null
-    update: (_: { row: ID | null; column: ID | null }) => void
+    update: (_: HoverState) => void
   }
 }
 
@@ -48,8 +49,11 @@ const context = createContext<ContextProps>({
     pinnedRows: [],
     columnOrder: [],
     columnSizes: {},
-    pinColumn: () => defaultViewAction,
-    pinRow: () => defaultViewAction,
+    pin: {
+      column: () => defaultViewAction,
+      row: () => defaultViewAction,
+    },
+    resize: () => defaultViewAction,
   },
   data: {
     pinnedColumns: [],

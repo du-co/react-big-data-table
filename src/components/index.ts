@@ -1,4 +1,5 @@
 export * from './ContextMenu'
 export * from './Grid'
 export * from './MenuItem'
+export * from './ResizeIndicator'
 export * from './Wrapper'

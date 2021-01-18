@@ -22,6 +22,9 @@ const Wrapper = styled.div<WrapperProps>`
   &:hover {
     background: ${({ theme }) => theme.backgroundHeaderHover};
   }
+  .resizing & {
+    background: ${({ theme }) => theme.backgroundHeader};
+  }
 `
 
 const GrabHandle = styled.div`
@@ -63,7 +66,7 @@ const Container = styled.div`
 `
 
 interface Props {
-  style: any
+  style: React.CSSProperties
   columnId: ID
   pinned?: boolean
 }
@@ -78,7 +81,7 @@ export const HeaderCell: React.FC<Props> = ({
 
   const menuItems = [
     <MenuItem
-      onClick={view.pinColumn(columnId, !pinned)}
+      onClick={view.pin.column(columnId, !pinned)}
       text={pinned ? 'Unpin column' : 'Pin column'}
       key={`pin-column-${columnId}`}
     />,
@@ -92,7 +95,7 @@ export const HeaderCell: React.FC<Props> = ({
     >
       <GrabHandle />
       <Container>{children}</Container>
-      <ResizeHandle />
+      <ResizeHandle onMouseDown={view.resize(columnId)} />
     </Wrapper>
   )
 }

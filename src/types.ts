@@ -1,3 +1,5 @@
+import { ColumnSizerProps, Index } from 'react-virtualized'
+
 export type ID = number | string
 export type ViewAction = (_: ID) => void
 export type PinAction = (_id: ID, _pin: boolean) => () => void
@@ -29,8 +31,11 @@ export interface BigDataTableView {
   columnSizes: {
     [key in ID]: number
   }
-  pinColumn: PinAction
-  pinRow: PinAction
+  pin: {
+    column: PinAction
+    row: PinAction
+  }
+  resize: (_: ID) => (_: React.MouseEvent) => void
 }
 
 export interface BigDataTableTransformedData {
@@ -73,4 +78,10 @@ export interface GridProps {
   pinned?: boolean
   innerRef: any
   scrollX: number
+  calculateColumnWidth: (_: Index) => number
+}
+
+export interface HoverState {
+  row: ID | null
+  column: ID | null
 }

@@ -1,10 +1,15 @@
 import React, { useState } from 'react'
 import { ThemeProvider } from 'styled-components'
-import { Wrapper, Grid, ContextMenu } from './components'
+import { Wrapper, Grid, ContextMenu, ResizeIndicator } from './components'
 
 import { Provider } from './context'
-import { useTableData, usePinnedColumns, usePinnedRows } from './hooks'
-import { BigDataTableProps } from './types'
+import {
+  useTableData,
+  usePinnedColumns,
+  usePinnedRows,
+  useColumnResize,
+} from './hooks'
+import { BigDataTableProps, HoverState } from './types'
 import defaultTheme from './theme'
 import {
   DEFAULT_SCROLL_STATE,
@@ -44,9 +49,13 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
     onContextMenu,
     triggerMenuAction,
   } = useContextMenu()
-  const [hovered, setHovered] = useState({ row: null, column: null })
+  const [hovered, setHovered] = useState<HoverState>({
+    row: null,
+    column: null,
+  })
   const { pinnedColumns, pinColumn } = usePinnedColumns()
   const { pinnedRows, pinRow } = usePinnedRows()
+  const { initializeResize, columnSizes, resizeIndicator } = useColumnResize()
   const columnOrder = data.columns.map((c) => c.id).reverse()
 
   const transformedData = useTableData({
@@ -71,9 +80,12 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
           pinnedColumns,
           pinnedRows,
           columnOrder,
-          columnSizes: {},
-          pinColumn,
-          pinRow,
+          columnSizes,
+          pin: {
+            column: pinColumn,
+            row: pinRow,
+          },
+          resize: initializeResize,
         },
         hovered: {
           ...hovered,
@@ -98,6 +110,7 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
             <Grid pinned />
           )}
           <Grid />
+          <ResizeIndicator ref={resizeIndicator} rowHeight={rowHeight} />
         </Wrapper>
         <ContextMenu menuState={menuState} innerRef={menuRef}>
           {menuChildren}

@@ -15,6 +15,7 @@ export const Pinned: React.FC<GridProps> = ({
   innerRef,
   pinned,
   scrollX,
+  calculateColumnWidth,
 }) => {
   const { view, config, data, scroll, updateScroll, hovered } = useTable()
   const keyPrefix = pinned ? 'pinned' : 'main'
@@ -76,7 +77,7 @@ export const Pinned: React.FC<GridProps> = ({
             <Grid
               cellRenderer={cellRenderer}
               columnCount={columns.length}
-              columnWidth={config.defaultColumnWidth}
+              columnWidth={calculateColumnWidth}
               height={height}
               onScroll={onScroll}
               ref={innerRef}
