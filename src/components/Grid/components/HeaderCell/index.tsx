@@ -4,13 +4,18 @@ import { useTable } from '../../../../context'
 import { ID } from '../../../../types'
 import { MenuItem } from '../../../MenuItem'
 
-const Wrapper = styled.div`
+interface WrapperProps {
+  hovered?: boolean
+}
+
+const Wrapper = styled.div<WrapperProps>`
   display: flex;
   box-sizing: border-box;
   border: ${({ theme }) =>
     `${theme.borderWidth}px solid ${theme.borderColorHeader}`};
   border-right: none;
-  background: ${({ theme }) => theme.backgroundHeader};
+  background: ${({ theme, hovered }) =>
+    hovered ? theme.backgroundHeaderHover : theme.backgroundHeader};
   &:first-child {
     border-left-color: transparent;
   }
@@ -66,7 +71,7 @@ export const HeaderCell: React.FC<Props> = ({
   columnId,
   pinned,
 }) => {
-  const { onContextMenu, view } = useTable()
+  const { context, view, hovered } = useTable()
 
   const menuItems = [
     <MenuItem
@@ -77,7 +82,11 @@ export const HeaderCell: React.FC<Props> = ({
   ]
 
   return (
-    <Wrapper style={style} onContextMenu={onContextMenu(menuItems)}>
+    <Wrapper
+      style={style}
+      onContextMenu={context.onContextMenu(menuItems)}
+      hovered={hovered.column === columnId}
+    >
       <GrabHandle />
       <Container>{children}</Container>
       <ResizeHandle />

@@ -4,11 +4,17 @@ import { useTable } from '../../../../context'
 import { ID } from '../../../../types'
 import { MenuItem } from '../../../MenuItem'
 
-const Wrapper = styled.div`
+interface WrapperProps {
+  hovered?: boolean
+}
+
+const Wrapper = styled.div<WrapperProps>`
   box-sizing: border-box;
   border: ${({ theme }) => `${theme.borderWidth}px solid ${theme.borderColor}`};
   border-right: none;
   border-top: none;
+  background: ${({ theme, hovered }) =>
+    hovered ? theme.backgroundMenuItem : 'transparent'};
 `
 
 interface Props {
@@ -27,7 +33,7 @@ export const Cell: React.FC<Props> = ({
   pinnedRow,
   pinnedColumn,
 }) => {
-  const { onContextMenu, view } = useTable()
+  const { context, view, hovered } = useTable()
 
   const menuItems = [
     <MenuItem
@@ -43,7 +49,17 @@ export const Cell: React.FC<Props> = ({
   ]
 
   return (
-    <Wrapper style={style} onContextMenu={onContextMenu(menuItems)}>
+    <Wrapper
+      style={style}
+      onContextMenu={context.onContextMenu(menuItems)}
+      onMouseEnter={() =>
+        hovered.update({
+          row: rowId,
+          column: columnId,
+        })
+      }
+      hovered={hovered.row === rowId}
+    >
       {children}
     </Wrapper>
   )

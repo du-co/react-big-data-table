@@ -43,10 +43,10 @@ const Shortcut = styled.span`
 `
 
 export const MenuItem: React.FC<Props> = ({ onClick, text, shortcut }) => {
-  const { triggerMenuAction } = useTable()
+  const { context } = useTable()
   return (
     <Wrapper>
-      <Button onClick={triggerMenuAction(onClick)}>
+      <Button onClick={context.triggerMenuAction(onClick)}>
         <Inner>
           {text}
           {shortcut && <Shortcut>{shortcut}</Shortcut>}

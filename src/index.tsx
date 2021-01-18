@@ -44,6 +44,7 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
     onContextMenu,
     triggerMenuAction,
   } = useContextMenu()
+  const [hovered, setHovered] = useState({ row: null, column: null })
   const { pinnedColumns, pinColumn } = usePinnedColumns()
   const { pinnedRows, pinRow } = usePinnedRows()
   const columnOrder = data.columns.map((c) => c.id).reverse()
@@ -62,8 +63,10 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
       value={{
         scroll,
         updateScroll,
-        onContextMenu,
-        triggerMenuAction,
+        context: {
+          onContextMenu,
+          triggerMenuAction,
+        },
         view: {
           pinnedColumns,
           pinnedRows,
@@ -71,6 +74,10 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
           columnSizes: {},
           pinColumn,
           pinRow,
+        },
+        hovered: {
+          ...hovered,
+          update: setHovered,
         },
         data: transformedData,
         config: {

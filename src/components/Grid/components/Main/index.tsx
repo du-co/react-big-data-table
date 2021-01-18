@@ -16,7 +16,7 @@ export const Main: React.FC<GridProps> = ({
   pinned,
   scrollX,
 }) => {
-  const { config, data, scroll, updateScroll, view } = useTable()
+  const { config, data, scroll, updateScroll, view, hovered } = useTable()
   const keyPrefix = pinned ? 'pinned' : 'main'
 
   const cellRenderer: GridCellRenderer = ({ style, columnIndex, rowIndex }) => {
@@ -72,7 +72,10 @@ export const Main: React.FC<GridProps> = ({
 
   return (
     <>
-      <Row flexed>
+      <Row
+        flexed
+        onMouseLeave={() => hovered.update({ row: null, column: null })}
+      >
         <Row>
           <AutoSizer>
             {({ width, height }) => (

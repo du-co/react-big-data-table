@@ -8,6 +8,7 @@ import {
   BigDataTableProps,
   BigDataTableTransformedData,
   BigDataTableView,
+  ID,
   ScrollState,
 } from './types'
 
@@ -22,8 +23,15 @@ export interface ContextProps {
   config: ContextConfig
   scroll: ScrollState
   updateScroll: (_state: ScrollState) => void
-  onContextMenu: (_children: any) => (e: any) => void
-  triggerMenuAction: (_action: any) => () => void
+  context: {
+    onContextMenu: (_children: any) => (e: any) => void
+    triggerMenuAction: (_action: any) => () => void
+  }
+  hovered: {
+    row: ID | null
+    column: ID | null
+    update: (_: { row: ID | null; column: ID | null }) => void
+  }
 }
 
 const defaultViewAction = () => {}
@@ -31,8 +39,10 @@ const defaultViewAction = () => {}
 const context = createContext<ContextProps>({
   scroll: DEFAULT_SCROLL_STATE,
   updateScroll: defaultViewAction,
-  onContextMenu: () => () => {},
-  triggerMenuAction: () => () => {},
+  context: {
+    onContextMenu: () => () => {},
+    triggerMenuAction: () => () => {},
+  },
   view: {
     pinnedColumns: [],
     pinnedRows: [],
@@ -54,6 +64,11 @@ const context = createContext<ContextProps>({
     onSelectionAllChange: defaultViewAction,
     defaultColumnWidth: DEFAULT_COLUMN_WIDTH,
     rowHeight: DEFAULT_ROW_HEIGHT,
+  },
+  hovered: {
+    row: null,
+    column: null,
+    update: defaultViewAction,
   },
 })
 
