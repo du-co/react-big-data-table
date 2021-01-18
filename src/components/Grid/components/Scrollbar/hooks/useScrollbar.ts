@@ -139,9 +139,29 @@ export const useScrollbar = ({
     e.currentTarget.classList.add('active')
   }
 
+  const onWheel = (e: any) => {
+    if (horizontal && !e.shiftKey) {
+      return
+    }
+    const { current } = scrollbar
+    const delta = e.deltaY
+    const scroll = horizontal ? scrollLeft : scrollTop
+    if (!current.scrolling) {
+      current.scrolling = true
+      const move = scroll + delta
+      window.requestAnimationFrame(() => {
+        if (updateScroll) {
+          updateScroll(move < 0 ? 0 : move)
+        }
+        current.scrolling = false
+      })
+    }
+  }
+
   return {
     scrollBarHandle,
     shouldScroll,
     initializeScroll,
+    onWheel,
   }
 }

@@ -19,6 +19,9 @@ const Wrapper = styled.div<WrapperProps>`
   &:first-child {
     border-left-color: transparent;
   }
+  &:hover {
+    background: ${({ theme }) => theme.backgroundHeaderHover};
+  }
 `
 
 const GrabHandle = styled.div`

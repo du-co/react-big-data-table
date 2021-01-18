@@ -17,7 +17,12 @@ export const Scrollbar: React.FC<Props> = ({
   const scrollRef = useRef<HTMLDivElement>(null)
   const { config } = useTable()
 
-  const { shouldScroll, scrollBarHandle, initializeScroll } = useScrollbar({
+  const {
+    shouldScroll,
+    scrollBarHandle,
+    initializeScroll,
+    onWheel,
+  } = useScrollbar({
     gridRef,
     scrollRef,
     horizontal,
@@ -33,6 +38,7 @@ export const Scrollbar: React.FC<Props> = ({
       pinned={pinned}
       rowHeight={config.rowHeight}
       pullUp={pullUp}
+      onWheel={onWheel}
     >
       <Container ref={scrollRef}>
         {shouldScroll && (

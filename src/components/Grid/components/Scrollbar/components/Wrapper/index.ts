@@ -27,7 +27,7 @@ export const Wrapper = styled.div<Props>`
     return false
   }}
 
-  ${({ pullUp, rowHeight, theme }) => {
+  ${({ pullUp, rowHeight }) => {
     if (pullUp) {
       return `
         margin-top: -${rowHeight}px;
