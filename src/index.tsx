@@ -6,6 +6,7 @@ import {
   ContextMenu,
   ResizeIndicator,
   ReorderIndicator,
+  GhostImage,
 } from './components'
 
 import { Provider } from './context'
@@ -75,6 +76,8 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
     dragging,
     confirmReorder,
     reorderIndicator,
+    ghostImage,
+    onDrag,
   } = useColumnReorder(wrapperRef, dcol, pinnedColumns, updatePinnedColumns)
 
   const transformedData = useTableData({
@@ -108,6 +111,7 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
           reorder: {
             dragging,
             initialize: initializeReorder,
+            drag: onDrag,
             reorder: reorderColumn,
             confirm: confirmReorder,
           },
@@ -137,6 +141,7 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
           <Grid />
           <ResizeIndicator ref={resizeIndicator} rowHeight={rowHeight} />
           <ReorderIndicator ref={reorderIndicator} />
+          <GhostImage ref={ghostImage} rowHeight={rowHeight} />
         </Wrapper>
         <ContextMenu menuState={menuState} innerRef={menuRef}>
           {menuChildren}

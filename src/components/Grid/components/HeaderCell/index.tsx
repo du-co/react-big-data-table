@@ -99,6 +99,7 @@ export const HeaderCell: React.FC<Props> = ({
       <GrabHandle
         onDragStart={view.reorder.initialize(index, pinned)}
         onDragEnd={view.reorder.confirm}
+        onDrag={view.reorder.drag}
         draggable
       />
       <Container>{children}</Container>

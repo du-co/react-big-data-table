@@ -48,6 +48,7 @@ export interface BigDataTableView {
     initialize: ReorderAction
     reorder: ReorderAction
     confirm: () => void
+    drag: () => void
   }
 }
 

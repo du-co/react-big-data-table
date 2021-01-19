@@ -1,18 +1,18 @@
-import { useRef, useState } from 'react'
+import { DragEvent, useRef, useState } from 'react'
 import { ID } from '../types'
 
 const initialRef = {
-  handle: (null as unknown) as HTMLDivElement,
   newIndex: 0,
   dragging: null,
   pinned: false,
+  offset: 0,
 }
 
 interface Reorder {
-  handle: HTMLDivElement
   newIndex: number
   dragging: number | null
   pinned?: boolean
+  offset: number
 }
 
 export const useColumnReorder = (
@@ -23,6 +23,7 @@ export const useColumnReorder = (
 ) => {
   const reorder = useRef<Reorder>(initialRef)
   const reorderIndicator = useRef<HTMLDivElement>(null)
+  const ghostImage = useRef<HTMLDivElement>(null)
   const [columnOrder, updateColumnOrder] = useState(initialOrder)
 
   const initializeReorder = (index: number, pinned?: boolean) => (
@@ -35,10 +36,21 @@ export const useColumnReorder = (
     }
     reorder.current = {
       ...initialRef,
-      handle,
       dragging: index,
       newIndex: index,
       pinned,
+      offset: wrapperRef.current.getBoundingClientRect().left,
+    }
+    if (ghostImage.current) {
+      ghostImage.current.style.width = `${handle.parentNode?.offsetWidth}px`
+      ghostImage.current.style.left = `${e.clientX - reorder.current.offset}px`
+      ghostImage.current.classList.add('isMoving')
+    }
+  }
+
+  const onDrag = (e: DragEvent) => {
+    if (ghostImage.current) {
+      ghostImage.current.style.left = `${e.clientX - reorder.current.offset}px`
     }
   }
 
@@ -58,9 +70,7 @@ export const useColumnReorder = (
         indicator.classList.add('moveRight')
       }
       indicator.style.width = `${offset.width}px`
-      indicator.style.transform = `translateX(${
-        offset.left - wrapperRef.current.getBoundingClientRect().left
-      }px)`
+      indicator.style.transform = `translateX(${offset.left - column.offset}px)`
     }
     column.newIndex = index
   }
@@ -83,6 +93,7 @@ export const useColumnReorder = (
     }
     indicator?.classList.remove('moveLeft')
     indicator?.classList.remove('moveRight')
+    ghostImage.current?.classList.remove('isMoving')
     document.body.classList.remove('reordering')
     reorder.current = initialRef
   }
@@ -93,6 +104,8 @@ export const useColumnReorder = (
     reorderColumn,
     confirmReorder,
     reorderIndicator,
+    ghostImage,
+    onDrag,
     dragging: {
       index: reorder.current.dragging,
       pinned: reorder.current.pinned,

@@ -61,6 +61,7 @@ const context = createContext<ContextProps>({
       initialize: () => defaultViewAction,
       reorder: () => defaultViewAction,
       confirm: defaultViewAction,
+      drag: defaultViewAction,
     },
   },
   data: {
