@@ -1,4 +1,4 @@
-import { DragEvent, useRef, useState } from 'react'
+import { DragEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { ID } from '../types'
 
 const initialRef = {
@@ -26,6 +26,11 @@ export const useColumnReorder = (
   const ghostImage = useRef<HTMLDivElement>(null)
   const [columnOrder, updateColumnOrder] = useState(initialOrder)
 
+  const filteredOrder = useMemo(
+    () => columnOrder.filter((c) => !pinnedColumns.includes(c)),
+    [pinnedColumns, columnOrder]
+  )
+
   const initializeReorder = (index: number, pinned?: boolean) => (
     e: React.DragEvent
   ) => {
@@ -42,7 +47,9 @@ export const useColumnReorder = (
       offset: wrapperRef.current.getBoundingClientRect().left,
     }
     if (ghostImage.current) {
-      ghostImage.current.style.width = `${handle.parentNode?.offsetWidth}px`
+      ghostImage.current.style.width = `${
+        (<HTMLDivElement>handle.parentNode).offsetWidth
+      }px`
       ghostImage.current.style.left = `${e.clientX - reorder.current.offset}px`
       ghostImage.current.classList.add('isMoving')
     }
@@ -85,9 +92,13 @@ export const useColumnReorder = (
         update.splice(column.newIndex, 0, pinnedColumns[column.dragging!])
         updatePinnedColumns(update)
       } else {
+        const oldID = filteredOrder[column.dragging!]
+        const newID = filteredOrder[column.newIndex]
+        const oldIndex = columnOrder.indexOf(oldID)
+        const newIndex = columnOrder.indexOf(newID)
         const update = [...columnOrder]
-        update.splice(column.dragging!, 1)
-        update.splice(column.newIndex, 0, columnOrder[column.dragging!])
+        update.splice(oldIndex, 1)
+        update.splice(newIndex, 0, columnOrder[oldIndex])
         updateColumnOrder(update)
       }
     }

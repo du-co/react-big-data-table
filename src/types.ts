@@ -1,6 +1,6 @@
 import { Index } from 'react-virtualized'
 
-export type ID = number | string
+export type ID = number
 export type ViewAction = (_: ID) => void
 export type PinAction = (_id: ID, _pin: boolean) => () => void
 export type ReorderAction = (
