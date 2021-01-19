@@ -1,6 +1,12 @@
 import React, { useRef, useState } from 'react'
 import { ThemeProvider } from 'styled-components'
-import { Wrapper, Grid, ContextMenu, ResizeIndicator } from './components'
+import {
+  Wrapper,
+  Grid,
+  ContextMenu,
+  ResizeIndicator,
+  ReorderIndicator,
+} from './components'
 
 import { Provider } from './context'
 import {
@@ -61,12 +67,15 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
   const { initializeResize, columnSizes, resizeIndicator } = useColumnResize(
     wrapperRef
   )
-  const columnOrder = data.columns.map((c) => c.id).reverse()
-  const { initializeReorder } = useColumnReorder(
+  const dcol = data.columns.map((c) => c.id).reverse()
+  const {
+    initializeReorder,
+    reorderColumn,
     columnOrder,
-    pinnedColumns,
-    updatePinnedColumns
-  )
+    dragging,
+    confirmReorder,
+    reorderIndicator,
+  } = useColumnReorder(wrapperRef, dcol, pinnedColumns, updatePinnedColumns)
 
   const transformedData = useTableData({
     data,
@@ -96,6 +105,12 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
             row: pinRow,
           },
           resize: initializeResize,
+          reorder: {
+            dragging,
+            initialize: initializeReorder,
+            reorder: reorderColumn,
+            confirm: confirmReorder,
+          },
         },
         hovered: {
           ...hovered,
@@ -121,6 +136,7 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
           )}
           <Grid />
           <ResizeIndicator ref={resizeIndicator} rowHeight={rowHeight} />
+          <ReorderIndicator ref={reorderIndicator} />
         </Wrapper>
         <ContextMenu menuState={menuState} innerRef={menuRef}>
           {menuChildren}

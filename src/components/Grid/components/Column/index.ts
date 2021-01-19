@@ -9,6 +9,7 @@ export const Column = styled.div`
     will-change: unset !important;
     overflow: scroll !important;
     scrollbar-width: none;
+    -ms-overflow-style: none;
     ::-webkit-scrollbar {
       display: none;
     }

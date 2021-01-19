@@ -23,6 +23,7 @@ export const Header: React.FC<GridProps> = ({
     const column = columns[columnIndex]
     return (
       <HeaderCell
+        index={columnIndex}
         style={style}
         key={`${keyPrefix}-header-${columnIndex}`}
         pinned={pinned}

@@ -66,12 +66,14 @@ const Container = styled.div`
 `
 
 interface Props {
+  index: number
   style: React.CSSProperties
   columnId: ID
   pinned?: boolean
 }
 
 export const HeaderCell: React.FC<Props> = ({
+  index,
   children,
   style,
   columnId,
@@ -92,8 +94,13 @@ export const HeaderCell: React.FC<Props> = ({
       style={style}
       onContextMenu={context.onContextMenu(menuItems)}
       hovered={hovered.column === columnId}
+      onDragOver={view.reorder.reorder(index, pinned)}
     >
-      <GrabHandle />
+      <GrabHandle
+        onDragStart={view.reorder.initialize(index, pinned)}
+        onDragEnd={view.reorder.confirm}
+        draggable
+      />
       <Container>{children}</Container>
       <ResizeHandle onMouseDown={view.resize(columnId)} />
     </Wrapper>

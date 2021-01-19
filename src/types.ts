@@ -1,8 +1,12 @@
-import { ColumnSizerProps, Index } from 'react-virtualized'
+import { Index } from 'react-virtualized'
 
 export type ID = number | string
 export type ViewAction = (_: ID) => void
 export type PinAction = (_id: ID, _pin: boolean) => () => void
+export type ReorderAction = (
+  _: number,
+  pinned?: boolean
+) => (_: React.DragEvent) => void
 
 export interface ColumnData {
   id: ID
@@ -36,6 +40,15 @@ export interface BigDataTableView {
     row: PinAction
   }
   resize: (_: ID) => (_: React.MouseEvent) => void
+  reorder: {
+    dragging: {
+      index: number | null
+      pinned?: boolean
+    }
+    initialize: ReorderAction
+    reorder: ReorderAction
+    confirm: () => void
+  }
 }
 
 export interface BigDataTableTransformedData {

@@ -26,6 +26,7 @@ export const Pinned: React.FC<GridProps> = ({
     const cell = utils.find(row.columns, column.id, 'columnId')
     return (
       <Cell
+        columnIndex={columnIndex}
         key={`${keyPrefix}-pinned-${columnIndex}-${rowIndex}`}
         pinnedRow={true}
         pinnedColumn={pinned}

@@ -22,6 +22,7 @@ const Wrapper = styled.div<WrapperProps>`
 `
 
 interface Props {
+  columnIndex: number
   style: React.CSSProperties
   rowId: ID
   columnId: ID
@@ -30,6 +31,7 @@ interface Props {
 }
 
 export const Cell: React.FC<Props> = ({
+  columnIndex,
   children,
   style,
   rowId,
@@ -63,6 +65,7 @@ export const Cell: React.FC<Props> = ({
         })
       }
       hovered={hovered.row === rowId}
+      onDragOver={view.reorder.reorder(columnIndex, pinnedColumn)}
     >
       {children}
     </Wrapper>

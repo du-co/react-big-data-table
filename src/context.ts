@@ -54,6 +54,14 @@ const context = createContext<ContextProps>({
       row: () => defaultViewAction,
     },
     resize: () => defaultViewAction,
+    reorder: {
+      dragging: {
+        index: null,
+      },
+      initialize: () => defaultViewAction,
+      reorder: () => defaultViewAction,
+      confirm: defaultViewAction,
+    },
   },
   data: {
     pinnedColumns: [],
