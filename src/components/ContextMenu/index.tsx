@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import styled from 'styled-components'
+import { useTable } from '../../context'
 
 interface MenuProps {
   x: number
@@ -22,6 +23,7 @@ const Menu = styled.div<MenuProps>`
   box-shadow: 0 2px 6px 2px rgba(0, 0, 0, 0.15);
   overflow: auto;
   min-width: 200px;
+  outline: none;
   ${({ x, y, theme }) => `
     top: ${y}px;
     left: ${x}px;
@@ -40,12 +42,49 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
   children,
   menuState,
   innerRef,
-}) =>
-  menuState.visible
+}) => {
+  const [selected, updateSelected] = useState(0)
+  const { context } = useTable()
+  useEffect(() => {
+    updateSelected(0)
+    if (menuState.visible) {
+      innerRef.current.focus()
+    }
+  }, [menuState.visible])
+
+  const items = React.Children.map(children, (child, index) => {
+    return React.cloneElement(child as ReactElement, {
+      selected: selected === index,
+    })
+  })
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowDown') {
+      const update = selected + 1
+      updateSelected(update === items!.length ? 0 : update)
+    } else if (e.key === 'ArrowUp') {
+      const update = selected - 1
+      updateSelected(update < 0 ? items!.length - 1 : update)
+    } else if (e.key === 'Enter') {
+      context.triggerMenuAction(items![selected].props.onClick)()
+    }
+  }
+
+  return menuState.visible
     ? createPortal(
-        <Menu {...menuState} ref={innerRef}>
-          <Wrapper>{children}</Wrapper>
+        <Menu
+          {...menuState}
+          ref={innerRef}
+          tabIndex={menuState.visible ? 0 : -1}
+          onKeyDown={handleKeyDown}
+        >
+          <Wrapper>
+            {React.Children.map(items, (child, index) => (
+              <li onMouseEnter={() => updateSelected(index)}>{child}</li>
+            ))}
+          </Wrapper>
         </Menu>,
         document.body
       )
     : null
+}

@@ -16,8 +16,8 @@ export const useContextMenu = () => {
     activeRef.current = e.target
     setState({
       visible: true,
-      x: e.clientX - 10,
-      y: e.clientY - 15,
+      x: e.clientX,
+      y: e.clientY,
     })
     setChildren(children)
   }

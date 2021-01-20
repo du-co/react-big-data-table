@@ -6,10 +6,10 @@ interface Props {
   onClick: () => void
   text: string
   shortcut?: string
+  selected?: boolean
 }
 
-const Wrapper = styled.li``
-const Button = styled.button`
+const Button = styled.button<{ selected?: boolean }>`
   display: block;
   border: none;
   background: none;
@@ -20,13 +20,11 @@ const Button = styled.button`
   cursor: pointer;
   outline: none;
 
-  ${({ theme }) => `
+  ${({ theme, selected }) => `
     font-family: ${theme.fontFamily};
     font-size: ${theme.fontSize}px;
-
-    &:hover {
-      background: ${theme.backgroundMenuItem};
-    }
+    background: ${selected ? theme.backgroundMenuItem : 'none'};
+    
     &:active {
       background: ${theme.backgroundHeaderHover};
     }
@@ -42,16 +40,19 @@ const Shortcut = styled.span`
   padding-left: 1eem;
 `
 
-export const MenuItem: React.FC<Props> = ({ onClick, text, shortcut }) => {
+export const MenuItem: React.FC<Props> = ({
+  onClick,
+  text,
+  shortcut,
+  selected,
+}) => {
   const { context } = useTable()
   return (
-    <Wrapper>
-      <Button onClick={context.triggerMenuAction(onClick)}>
-        <Inner>
-          {text}
-          {shortcut && <Shortcut>{shortcut}</Shortcut>}
-        </Inner>
-      </Button>
-    </Wrapper>
+    <Button onClick={context.triggerMenuAction(onClick)} selected={selected}>
+      <Inner>
+        {text}
+        {shortcut && <Shortcut>{shortcut}</Shortcut>}
+      </Inner>
+    </Button>
   )
 }
