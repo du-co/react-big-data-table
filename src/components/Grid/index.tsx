@@ -34,23 +34,15 @@ export const Grid: React.FC<Props> = ({ pinned }) => {
   }
 
   useEffect(() => {
-    if (headerGrid.current && mainGrid.current) {
-      headerGrid.current!.recomputeGridSize()
-      mainGrid.current!.recomputeGridSize()
-    }
-    if (pinnedGrid.current) {
-      pinnedGrid.current!.recomputeGridSize()
-    }
+    headerGrid.current?.recomputeGridSize()
+    mainGrid.current?.recomputeGridSize()
+    pinnedGrid.current?.recomputeGridSize()
   }, [view.columnSizes])
 
   useEffect(() => {
-    if (headerGrid.current && mainGrid.current) {
-      headerGrid.current!.measureAllCells()
-      mainGrid.current!.measureAllCells()
-    }
-    if (pinnedGrid.current) {
-      pinnedGrid.current!.measureAllCells()
-    }
+    headerGrid.current?.measureAllCells()
+    mainGrid.current?.measureAllCells()
+    pinnedGrid.current?.measureAllCells()
   }, [])
 
   return (
