@@ -43,6 +43,16 @@ export const Grid: React.FC<Props> = ({ pinned }) => {
     }
   }, [view.columnSizes])
 
+  useEffect(() => {
+    if (headerGrid.current && mainGrid.current) {
+      headerGrid.current!.measureAllCells()
+      mainGrid.current!.measureAllCells()
+    }
+    if (pinnedGrid.current) {
+      pinnedGrid.current!.measureAllCells()
+    }
+  }, [])
+
   return (
     <Row style={{ width: pinned ? columnWidth : 'auto' }} pinned={pinned}>
       <Column>

@@ -1,4 +1,4 @@
-import { DragEvent, useEffect, useMemo, useRef, useState } from 'react'
+import { DragEvent, useMemo, useRef, useState } from 'react'
 import { ID } from '../types'
 
 const initialRef = {
