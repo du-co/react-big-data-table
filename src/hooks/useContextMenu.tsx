@@ -52,6 +52,7 @@ export const useContextMenu = () => {
       document.removeEventListener('mousedown', closeMenu)
       document.removeEventListener('contextmenu', closeMenu)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return {

@@ -18,15 +18,15 @@ export const Grid: React.FC<Props> = ({ pinned }) => {
     ? scroll.pinned.default.left
     : scroll.main.default.left
 
-  const columnWidth = pinned
-    ? useMemo(
-        () =>
-          view.pinnedColumns
+  const columnWidth = useMemo(
+    () =>
+      pinned
+        ? view.pinnedColumns
             .map((c) => view.columnSizes[c] ?? config.defaultColumnWidth)
-            .reduce((prev, curr) => prev + curr),
-        [view.pinnedColumns, view.columnSizes]
-      )
-    : 0
+            .reduce((prev, curr) => prev + curr)
+        : 0,
+    [view.pinnedColumns, view.columnSizes, config.defaultColumnWidth, pinned]
+  )
 
   const calculateColumnWidth = ({ index }: Index) => {
     const column = columns[index].id

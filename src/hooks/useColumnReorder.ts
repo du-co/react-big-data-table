@@ -48,7 +48,7 @@ export const useColumnReorder = (
     }
     if (ghostImage.current) {
       ghostImage.current.style.width = `${
-        (<HTMLDivElement>handle.parentNode).offsetWidth
+        (handle.parentNode as HTMLDivElement).offsetWidth
       }px`
       ghostImage.current.style.left = `${e.clientX - reorder.current.offset}px`
       ghostImage.current.classList.add('isMoving')

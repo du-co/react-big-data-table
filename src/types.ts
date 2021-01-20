@@ -1,3 +1,4 @@
+import { DragEvent } from 'react'
 import { Index } from 'react-virtualized'
 
 export type ID = number
@@ -48,7 +49,7 @@ export interface BigDataTableView {
     initialize: ReorderAction
     reorder: ReorderAction
     confirm: () => void
-    drag: () => void
+    drag: (_: DragEvent) => void
   }
 }
 

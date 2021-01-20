@@ -72,7 +72,7 @@ export const useColumnResize = (wrapperRef: any, initialSizes = {}) => {
     resizer.current = {
       ...initialRef,
       handle,
-      width: (<HTMLDivElement>handle.parentNode).offsetWidth,
+      width: (handle.parentNode as HTMLDivElement).offsetWidth,
       start: e.clientX,
       columnId,
       offset: wrapperRef.current.getBoundingClientRect().left,

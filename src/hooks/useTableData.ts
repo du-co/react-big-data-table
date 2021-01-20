@@ -25,7 +25,7 @@ export const useTableData = ({
   )
   const pinnedColumnData = useMemo(
     () => pinnedColumns.map((c) => utils.find(data.columns, c, 'id')),
-    [data.columns, columnOrder, pinnedColumns]
+    [data.columns, pinnedColumns]
   )
   const columnData = useMemo(
     () =>

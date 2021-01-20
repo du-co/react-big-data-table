@@ -27,6 +27,7 @@ export const useScrollbar = ({
     setTimeout(() => {
       state[1](true)
     }, 0)
+    // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [])
 
   const grid = {

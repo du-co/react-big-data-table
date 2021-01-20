@@ -45,12 +45,13 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
 }) => {
   const [selected, updateSelected] = useState(0)
   const { context } = useTable()
+
   useEffect(() => {
     updateSelected(0)
     if (menuState.visible) {
       innerRef.current.focus()
     }
-  }, [menuState.visible])
+  }, [menuState.visible, innerRef])
 
   const items = React.Children.map(children, (child, index) => {
     return React.cloneElement(child as ReactElement, {
