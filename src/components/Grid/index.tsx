@@ -37,7 +37,7 @@ export const Grid: React.FC<Props> = ({ pinned }) => {
     headerGrid.current?.recomputeGridSize()
     mainGrid.current?.recomputeGridSize()
     pinnedGrid.current?.recomputeGridSize()
-  }, [view.columnSizes])
+  }, [view.columnSizes, view.columnOrder, view.pinnedColumns])
 
   useEffect(() => {
     headerGrid.current?.measureAllCells()
