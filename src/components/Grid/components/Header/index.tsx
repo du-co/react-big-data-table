@@ -75,7 +75,7 @@ export const Header: React.FC<GridProps> = ({
               rowHeight={config.rowHeight}
               scrollLeft={scrollX}
               tabIndex={-1}
-              width={width}
+              width={width + 1}
             />
           )}
         </AutoSizer>

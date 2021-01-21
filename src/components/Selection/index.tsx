@@ -40,7 +40,7 @@ const SelectAll = styled.div<{ rowHeight: number }>`
 const Spacer = styled.div`
   height: 13px;
   width: 30px;
-  box-shadow: ${({ theme }) => `0 -1px 0 0 ${theme.borderColorHeader};`};
+  border-top: ${({ theme }) => `1px solid ${theme.borderColorHeader};`};
   z-index: 0;
 `
 

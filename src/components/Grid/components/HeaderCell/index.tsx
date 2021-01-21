@@ -17,7 +17,7 @@ const Wrapper = styled.div<WrapperProps>`
   background: ${({ theme, hovered }) =>
     hovered ? theme.backgroundHeaderHover : theme.backgroundHeader};
   &:first-child {
-    border-left-color: transparent;
+    border-left: none;
   }
   &:hover {
     background: ${({ theme }) => theme.backgroundHeaderHover};

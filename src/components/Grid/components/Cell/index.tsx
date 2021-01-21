@@ -7,13 +7,15 @@ import { MenuItem } from '../../../MenuItem'
 interface WrapperProps {
   hovered?: boolean
   killEvents?: boolean
+  columnIndex: number
+  rowIndex: number
 }
 
 const Wrapper = styled.div<WrapperProps>`
   box-sizing: border-box;
   border: ${({ theme }) => `${theme.borderWidth}px solid ${theme.borderColor}`};
   border-right: none;
-  border-top: none;
+  border-bottom: none;
   background: ${({ theme, hovered }) =>
     hovered ? theme.backgroundMenuItem : 'transparent'};
 
@@ -26,10 +28,23 @@ const Wrapper = styled.div<WrapperProps>`
     `
     pointer-events: none;
   `}
+
+  ${({ columnIndex }) =>
+    columnIndex === 0 &&
+    `
+    border-left: none;
+  `}
+
+${({ rowIndex }) =>
+    rowIndex === 0 &&
+    `
+    border-top: none;
+  `}
 `
 
 interface Props {
   columnIndex: number
+  rowIndex: number
   style: React.CSSProperties
   rowId: ID
   columnId: ID
@@ -39,6 +54,7 @@ interface Props {
 
 export const Cell: React.FC<Props> = ({
   columnIndex,
+  rowIndex,
   children,
   style,
   rowId,
@@ -64,7 +80,7 @@ export const Cell: React.FC<Props> = ({
     )
   }
 
-  if (!config.disablePinnedColumns && !(columnIndex < 0)) {
+  if (!config.disablePinnedColumns) {
     menuItems.unshift(
       <MenuItem
         onClick={view.pin.column(columnId, !pinnedColumn)}
@@ -78,7 +94,7 @@ export const Cell: React.FC<Props> = ({
     <Wrapper
       style={style}
       onContextMenu={
-        menuItems.length === 0
+        menuItems.length === 0 || columnIndex < 0
           ? undefined
           : (e) => {
               context.onContextMenu(menuItems)(e)
@@ -97,6 +113,8 @@ export const Cell: React.FC<Props> = ({
       hovered={hovered.row === rowId}
       onDragOver={view.reorder.reorder(columnIndex, pinnedColumn)}
       killEvents={context.menuState.visible}
+      columnIndex={columnIndex}
+      rowIndex={rowIndex}
     >
       {children}
     </Wrapper>
