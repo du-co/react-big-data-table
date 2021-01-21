@@ -47,6 +47,7 @@ const Template: Story<BigDataTableProps> = (args) => (
         <p key="3">Column pinned: {pinnedColumn ? 'Yes' : 'No'}</p>,
         <p key="4">Row pinned: {pinnedRow ? 'Yes' : 'No'}</p>,
       ]}
+      onViewChange={(view) => console.log('View change:', view)}
     />
   </div>
 )

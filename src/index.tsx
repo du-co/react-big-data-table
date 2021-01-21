@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ThemeProvider } from 'styled-components'
 import {
   Wrapper,
@@ -76,6 +76,17 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
   })
 
   const [scroll, updateScroll] = useState(DEFAULT_SCROLL_STATE)
+
+  useEffect(() => {
+    if (config.onViewChange) {
+      config.onViewChange({
+        pinnedColumns,
+        pinnedRows,
+        columnOrder,
+        columnSizes,
+      })
+    }
+  }, [pinnedColumns, pinnedRows, columnOrder, columnSizes])
 
   return (
     <Provider
