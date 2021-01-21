@@ -1,5 +1,6 @@
 import { DragEvent, useMemo, useRef, useState } from 'react'
 import { ID } from '../types'
+import utils from '../utils'
 
 const initialRef = {
   newIndex: 0,
@@ -27,7 +28,7 @@ export const useColumnReorder = (
   const [columnOrder, updateColumnOrder] = useState(initialOrder)
 
   const filteredOrder = useMemo(
-    () => columnOrder.filter((c) => !pinnedColumns.includes(c)),
+    () => utils.filter(columnOrder, (c) => !pinnedColumns.includes(c)),
     [pinnedColumns, columnOrder]
   )
 
