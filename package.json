@@ -3,6 +3,8 @@
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "url": "https://github.com/du-co/react-big-data-table",
+  "repository": "git://github.com/du-co/react-big-data-table.git",
   "files": [
     "dist",
     "src"
@@ -30,7 +32,7 @@
       "pre-commit": "tsdx lint"
     }
   },
-  "name": "react-big-data-table",
+  "name": "@du-co/react-big-data-table",
   "author": "dahliacreative",
   "module": "dist/react-big-data-table.esm.js",
   "size-limit": [
