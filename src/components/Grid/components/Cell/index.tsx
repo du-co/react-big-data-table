@@ -53,30 +53,42 @@ export const Cell: React.FC<Props> = ({
     ? config.contextMenuRenderer({ rowId, columnId, pinnedRow, pinnedColumn })
     : []
 
-  const menuItems = [
-    <MenuItem
-      key={`pin-row-${rowId}-${columnId}`}
-      onClick={view.pin.row(rowId, !pinnedRow)}
-      text={pinnedRow ? 'Unpin row' : 'Pin row'}
-    />,
-    <MenuItem
-      onClick={view.pin.column(columnId, !pinnedColumn)}
-      text={pinnedColumn ? 'Unpin column' : 'Pin column'}
-      key={`pin-column-${rowId}-${columnId}`}
-    />,
-    ...customMenuItems,
-  ]
+  const menuItems = [...customMenuItems]
+
+  if (!config.disablePinnedRows) {
+    menuItems.unshift(
+      <MenuItem
+        key={`pin-row-${rowId}-${columnId}`}
+        onClick={view.pin.row(rowId, !pinnedRow)}
+        text={pinnedRow ? 'Unpin row' : 'Pin row'}
+      />
+    )
+  }
+
+  if (!config.disablePinnedColumns) {
+    menuItems.unshift(
+      <MenuItem
+        onClick={view.pin.column(columnId, !pinnedColumn)}
+        text={pinnedColumn ? 'Unpin column' : 'Pin column'}
+        key={`pin-column-${rowId}-${columnId}`}
+      />
+    )
+  }
 
   return (
     <Wrapper
       style={style}
-      onContextMenu={(e) => {
-        context.onContextMenu(menuItems)(e)
-        hovered.update({
-          row: rowId,
-          column: columnId,
-        })
-      }}
+      onContextMenu={
+        menuItems.length === 0
+          ? undefined
+          : (e) => {
+              context.onContextMenu(menuItems)(e)
+              hovered.update({
+                row: rowId,
+                column: columnId,
+              })
+            }
+      }
       onMouseEnter={() =>
         hovered.update({
           row: rowId,

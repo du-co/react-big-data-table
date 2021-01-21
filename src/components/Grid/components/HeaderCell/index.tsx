@@ -79,20 +79,26 @@ export const HeaderCell: React.FC<Props> = ({
   columnId,
   pinned,
 }) => {
-  const { context, view, hovered } = useTable()
+  const { context, view, hovered, config } = useTable()
 
-  const menuItems = [
-    <MenuItem
-      onClick={view.pin.column(columnId, !pinned)}
-      text={pinned ? 'Unpin column' : 'Pin column'}
-      key={`pin-column-${columnId}`}
-    />,
-  ]
+  const menuItems = []
+
+  if (!config.disablePinnedColumns) {
+    menuItems.push(
+      <MenuItem
+        onClick={view.pin.column(columnId, !pinned)}
+        text={pinned ? 'Unpin column' : 'Pin column'}
+        key={`pin-column-${columnId}`}
+      />
+    )
+  }
 
   return (
     <Wrapper
       style={style}
-      onContextMenu={context.onContextMenu(menuItems)}
+      onContextMenu={
+        menuItems.length === 0 ? undefined : context.onContextMenu(menuItems)
+      }
       hovered={hovered.column === columnId}
       onDragOver={view.reorder.reorder(index, pinned)}
     >
