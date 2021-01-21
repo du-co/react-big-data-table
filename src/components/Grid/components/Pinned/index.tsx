@@ -34,7 +34,15 @@ export const Pinned: React.FC<GridProps> = ({
         columnId={column.id}
         style={style}
       >
-        {cell.data}
+        {config.cellRenderer
+          ? config.cellRenderer({
+              rowId: row.id,
+              columnId: column.id,
+              pinnedColumn: pinned,
+              pinnedRow: true,
+              data: cell.data,
+            })
+          : cell.data}
       </Cell>
     )
   }

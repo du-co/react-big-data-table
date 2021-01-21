@@ -29,7 +29,13 @@ export const Header: React.FC<GridProps> = ({
         pinned={pinned}
         columnId={column.id}
       >
-        {column.key}
+        {config.headerCellRenderer
+          ? config.headerCellRenderer({
+              columnId: column.id,
+              pinnedColumn: pinned,
+              key: column.key,
+            })
+          : column.key}
       </HeaderCell>
     )
   }

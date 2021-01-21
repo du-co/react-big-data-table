@@ -1,4 +1,4 @@
-import { DragEvent } from 'react'
+import { DragEvent, ReactElement } from 'react'
 import { Index } from 'react-virtualized'
 
 export type ID = number
@@ -63,12 +63,25 @@ export interface BigDataTableTransformedData {
   rows: RowData[]
 }
 
-export interface ContextMenuRenderer {
+export interface ContextMenuRendererProps {
   rowId: ID
   columnId: ID
   pinnedRow?: boolean
   pinnedColumn?: boolean
 }
+
+export interface CellRendererProps extends ContextMenuRendererProps {
+  data: any
+}
+
+export interface HeaderCellRendererProps
+  extends Omit<ContextMenuRendererProps, 'rowId' | 'pinnedRow'> {
+  key: string
+}
+
+export type ContextMenuRenderer = (_: ContextMenuRendererProps) => JSX.Element[]
+export type CellRenderer = (_: CellRendererProps) => ReactElement
+export type HeaderCellRenderer = (_: HeaderCellRendererProps) => ReactElement
 
 export interface BigDataTableProps {
   disableSelection?: boolean
@@ -81,7 +94,9 @@ export interface BigDataTableProps {
   defaultColumnWidth?: number
   rowHeight?: number
   theme?: any
-  contextMenuRenderer?: (_: ContextMenuRenderer) => JSX.Element[]
+  contextMenuRenderer?: ContextMenuRenderer
+  cellRenderer?: CellRenderer
+  headerCellRenderer?: HeaderCellRenderer
   shortcuts?: {
     [key: string]: {
       multiple?: boolean

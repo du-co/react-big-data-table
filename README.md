@@ -57,6 +57,30 @@ const MyComponent = () => {
 }
 ```
 
+## Cell renderers
+
+### Header Cell
+
+```json
+{
+  "columnId": 0,
+  "key": "Column Title",
+  "pinnedColumn": true
+}
+```
+
+### Cell
+
+```json
+{
+  "rowId": 0,
+  "columnId": 0,
+  "pinnedRow": true,
+  "pinnedColumn": true,
+  "data": "Cell data"
+}
+```
+
 ## Default Theme
 
 ```json
@@ -80,16 +104,18 @@ const MyComponent = () => {
 
 ## Props
 
-| Prop                 | Default | Required | Description                                                                                            |
-| -------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------ |
-| data                 |         | Yes      | Data for rendering the table                                                                           |
-| defaultColumnWidth   | `150`   |          | Initial column width                                                                                   |
-| rowHeight            | `30`    |          | Height of rows                                                                                         |
-| disableSelection     | `false` |          | Disables ability to select rows                                                                        |
-| disablePinnedColumns | `false` |          | Disables the ability to pin columns                                                                    |
-| disablePinnedRows    | `false` |          | Disables the ability to pin rows                                                                       |
-| onSelectionChange    |         |          | Function to be called when a selection change is made, takes array of Ids as an argument               |
-| onSelectionAllChange |         |          | Function to be called when the user selects / deselects all, takes a boolean as an argument            |
-| onViewChange         |         |          | Function to be called when the table view changes, takes the current view config as an argument        |
-| contextMenuRenderer  |         |          | Function which returns an array of MenuItem components to be rendered as part of the cell context menu |
-| theme                |         |          | Object for overwriting the default theme                                                               |
+| Prop                 | Default | Required | Description                                                                                              |
+| -------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------- |
+| data                 |         | Yes      | Data for rendering the table                                                                             |
+| defaultColumnWidth   | `150`   |          | Initial column width                                                                                     |
+| rowHeight            | `30`    |          | Height of rows                                                                                           |
+| disableSelection     | `false` |          | Disables ability to select rows                                                                          |
+| disablePinnedColumns | `false` |          | Disables the ability to pin columns                                                                      |
+| disablePinnedRows    | `false` |          | Disables the ability to pin rows                                                                         |
+| onSelectionChange    |         |          | Function to be called when a selection change is made, takes array of Ids as an argument                 |
+| onSelectionAllChange |         |          | Function to be called when the user selects / deselects all, takes a boolean as an argument              |
+| onViewChange         |         |          | Function to be called when the table view changes, takes the current view config as an argument          |
+| contextMenuRenderer  |         |          | Function which returns an array of MenuItem components to be rendered as part of the cell context menu   |
+| cellRenderer         |         |          | Function used to render cells, takes cell object as an argument, returns a React component               |
+| headerCellRenderer   |         |          | Function used to render header cells, takes header cell object as an argument, returns a React component |
+| theme                |         |          | Object for overwriting the default theme                                                                 |
