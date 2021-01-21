@@ -81,6 +81,7 @@ export const Selection = () => {
     const id = pinned ? view.pinnedRows[rowIndex] : data.rows[rowIndex].id
     return (
       <Cell
+        rowIndex={rowIndex}
         style={style}
         key={`${pinned && 'pinned'}-selection-${rowIndex}`}
         rowId={id}
