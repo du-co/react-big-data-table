@@ -6,6 +6,7 @@ import { MenuItem } from '../../../MenuItem'
 
 interface WrapperProps {
   hovered?: boolean
+  killEvents?: boolean
 }
 
 const Wrapper = styled.div<WrapperProps>`
@@ -16,9 +17,16 @@ const Wrapper = styled.div<WrapperProps>`
   background: ${({ theme, hovered }) =>
     hovered ? theme.backgroundMenuItem : 'transparent'};
 
-  .resizing & {
+  .resizing &,
+  .reordering & {
     pointer-events: none;
   }
+
+  ${({ killEvents }) =>
+    killEvents &&
+    `
+    pointer-events: none;
+  `}
 `
 
 interface Props {
@@ -62,7 +70,13 @@ export const Cell: React.FC<Props> = ({
   return (
     <Wrapper
       style={style}
-      onContextMenu={context.onContextMenu(menuItems)}
+      onContextMenu={(e) => {
+        context.onContextMenu(menuItems)(e)
+        hovered.update({
+          row: rowId,
+          column: columnId,
+        })
+      }}
       onMouseEnter={() =>
         hovered.update({
           row: rowId,
@@ -71,6 +85,7 @@ export const Cell: React.FC<Props> = ({
       }
       hovered={hovered.row === rowId}
       onDragOver={view.reorder.reorder(columnIndex, pinnedColumn)}
+      killEvents={context.menuState.visible}
     >
       {children}
     </Wrapper>

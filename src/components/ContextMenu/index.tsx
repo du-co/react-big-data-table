@@ -14,6 +14,7 @@ interface ContextMenuProps {
 }
 
 const Menu = styled.div<MenuProps>`
+  pointer-events: auto;
   position: fixed;
   padding: 0.5em 0;
   z-index: 100;

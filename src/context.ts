@@ -27,6 +27,11 @@ export interface ContextProps {
   context: {
     onContextMenu: (_children: any) => (e: any) => void
     triggerMenuAction: (_action: any) => () => void
+    menuState: {
+      visible?: boolean
+      x: number
+      y: number
+    }
   }
   hovered: {
     row: ID | null
@@ -43,6 +48,11 @@ const context = createContext<ContextProps>({
   context: {
     onContextMenu: () => () => {},
     triggerMenuAction: () => () => {},
+    menuState: {
+      visible: false,
+      x: 0,
+      y: 0,
+    },
   },
   view: {
     pinnedColumns: [],

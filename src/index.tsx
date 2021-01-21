@@ -96,6 +96,7 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
         context: {
           onContextMenu,
           triggerMenuAction,
+          menuState,
         },
         view: {
           pinnedColumns,
@@ -135,7 +136,7 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
       >
         <Wrapper
           ref={wrapperRef}
-          onMouseLeave={() => setHovered({ row: null, column: null })}
+          onMouseLeave={() => menuState.visible ? null : setHovered({ row: null, column: null })}
         >
           {!config.disablePinnedColumns && pinnedColumns.length > 0 && (
             <Grid pinned />
@@ -154,4 +155,4 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
 }
 
 export default BigDataTable
-export { BigDataTableProps }
+export * from './types'

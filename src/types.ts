@@ -1,4 +1,4 @@
-import { DragEvent, ReactChildren } from 'react'
+import { DragEvent } from 'react'
 import { Index } from 'react-virtualized'
 
 export type ID = number

@@ -22,24 +22,22 @@ const data = {
 const meta: Meta = {
   title: 'Welcome',
   component: BigDataTable,
-  argTypes: {
-    children: {
-      control: {
-        type: 'text',
-      },
-    },
-  },
   parameters: {
-    controls: { expanded: true },
+    controls: { expanded: false },
   },
 }
 
 export default meta
 
-const Template: Story<BigDataTableProps> = (args) => (
-  <div style={{ width: '90vw', height: '90vh', position: 'relative' }}>
+const Template: Story<BigDataTableProps> = () => (
+  <div
+    style={{
+      width: '100%',
+      height: 'calc(100vh - 2rem)',
+      position: 'relative',
+    }}
+  >
     <BigDataTable
-      {...args}
       data={data}
       contextMenuRenderer={({ columnId, rowId, pinnedRow, pinnedColumn }) => [
         <p key="1">Column {columnId}</p>,
