@@ -17,8 +17,7 @@ const Wrapper = styled.div<WrapperProps>`
   background: ${({ theme, hovered }) =>
     hovered ? theme.backgroundMenuItem : 'transparent'};
 
-  .resizing &,
-  .reordering & {
+  .resizing & {
     pointer-events: none;
   }
 
