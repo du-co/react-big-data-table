@@ -1,5 +1,4 @@
 import React, { ReactElement, useEffect, useState } from 'react'
-import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 import { useTable } from '../../context'
 
@@ -71,21 +70,18 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
     }
   }
 
-  return menuState.visible
-    ? createPortal(
-        <Menu
-          {...menuState}
-          ref={innerRef}
-          tabIndex={menuState.visible ? 0 : -1}
-          onKeyDown={handleKeyDown}
-        >
-          <Wrapper>
-            {React.Children.map(items, (child, index) => (
-              <li onMouseEnter={() => updateSelected(index)}>{child}</li>
-            ))}
-          </Wrapper>
-        </Menu>,
-        document.body
-      )
-    : null
+  return menuState.visible ? (
+    <Menu
+      {...menuState}
+      ref={innerRef}
+      tabIndex={menuState.visible ? 0 : -1}
+      onKeyDown={handleKeyDown}
+    >
+      <Wrapper>
+        {React.Children.map(items, (child, index) => (
+          <li onMouseEnter={() => updateSelected(index)}>{child}</li>
+        ))}
+      </Wrapper>
+    </Menu>
+  ) : null
 }

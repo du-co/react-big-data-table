@@ -26,25 +26,8 @@ import {
 } from './consts'
 import { useContextMenu } from './hooks/useContextMenu'
 
-const rowData = (rowId: number) =>
-  Array.from(Array(100)).map((_, i) => ({
-    columnId: i,
-    data: `Row ${rowId}, Column ${i}`,
-  }))
-
-const data = {
-  columns: Array.from(Array(100)).map((_, i) => ({
-    id: i,
-    key: `Column ${i}`,
-  })),
-  rows: Array.from(Array(1000)).map((_, i) => ({
-    id: i,
-    columns: rowData(i),
-  })),
-}
-
 const BigDataTable: React.FC<BigDataTableProps> = ({
-  data: propData,
+  data,
   theme,
   defaultColumnWidth = DEFAULT_COLUMN_WIDTH,
   rowHeight = DEFAULT_ROW_HEIGHT,
@@ -68,7 +51,7 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
   const { initializeResize, columnSizes, resizeIndicator } = useColumnResize(
     wrapperRef
   )
-  const dcol = data.columns.map((c) => c.id).reverse()
+  const defaultColumnOrder = data.columns.map((c) => c.id)
   const {
     initializeReorder,
     reorderColumn,
@@ -78,7 +61,12 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
     reorderIndicator,
     ghostImage,
     onDrag,
-  } = useColumnReorder(wrapperRef, dcol, pinnedColumns, updatePinnedColumns)
+  } = useColumnReorder(
+    wrapperRef,
+    defaultColumnOrder,
+    pinnedColumns,
+    updatePinnedColumns
+  )
 
   const transformedData = useTableData({
     data,
@@ -134,7 +122,10 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
           ...theme,
         }}
       >
-        <Wrapper ref={wrapperRef}>
+        <Wrapper
+          ref={wrapperRef}
+          onMouseLeave={() => setHovered({ row: null, column: null })}
+        >
           {!config.disablePinnedColumns && pinnedColumns.length > 0 && (
             <Grid pinned />
           )}
@@ -142,10 +133,10 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
           <ResizeIndicator ref={resizeIndicator} rowHeight={rowHeight} />
           <ReorderIndicator ref={reorderIndicator} />
           <GhostImage ref={ghostImage} rowHeight={rowHeight} />
+          <ContextMenu menuState={menuState} innerRef={menuRef}>
+            {menuChildren}
+          </ContextMenu>
         </Wrapper>
-        <ContextMenu menuState={menuState} innerRef={menuRef}>
-          {menuChildren}
-        </ContextMenu>
       </ThemeProvider>
     </Provider>
   )

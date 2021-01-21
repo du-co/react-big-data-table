@@ -30,7 +30,7 @@ export const useColumnResize = (wrapperRef: any, initialSizes = {}) => {
     const classMethod = attach ? 'add' : 'remove'
     window[eventMethod]('mousemove', onMouseMove as EventListener)
     window[eventMethod]('mouseup', onMouseUp)
-    document.body.classList[classMethod]('resizing')
+    wrapperRef.current.classList[classMethod]('resizing')
   }
 
   const terminateResize = () => {

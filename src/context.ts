@@ -13,7 +13,7 @@ import {
   ScrollState,
 } from './types'
 
-interface ContextConfig extends BigDataTableProps {
+interface ContextConfig extends Omit<BigDataTableProps, 'data'> {
   defaultColumnWidth: number
   rowHeight: number
 }
@@ -71,6 +71,7 @@ const context = createContext<ContextProps>({
     rows: [],
   },
   config: {
+    disableSelection: false,
     disablePinnedColumns: false,
     disablePinnedRows: false,
     onSelectionChange: defaultViewAction,

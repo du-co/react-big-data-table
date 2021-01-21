@@ -35,7 +35,7 @@ export const useColumnReorder = (
     e: React.DragEvent
   ) => {
     const handle = e.currentTarget as HTMLDivElement
-    document.body.classList.add('reordering')
+    wrapperRef.current.classList.add('reordering')
     if (e.dataTransfer) {
       e.dataTransfer.setDragImage(document.createElement('div'), 0, 0)
     }
@@ -105,7 +105,7 @@ export const useColumnReorder = (
     indicator?.classList.remove('moveLeft')
     indicator?.classList.remove('moveRight')
     ghostImage.current?.classList.remove('isMoving')
-    document.body.classList.remove('reordering')
+    wrapperRef.current.classList.remove('reordering')
     reorder.current = initialRef
   }
 

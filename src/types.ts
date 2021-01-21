@@ -1,4 +1,4 @@
-import { DragEvent } from 'react'
+import { DragEvent, ReactChildren } from 'react'
 import { Index } from 'react-virtualized'
 
 export type ID = number
@@ -29,13 +29,16 @@ export interface BigDataTableData {
   rows: RowData[]
 }
 
-export interface BigDataTableView {
+export interface BigDataTableCurrentView {
   pinnedColumns: ID[]
   pinnedRows: ID[]
   columnOrder: ID[]
   columnSizes: {
     [key in ID]: number
   }
+}
+
+export interface BigDataTableView extends BigDataTableCurrentView {
   pin: {
     column: PinAction
     row: PinAction
@@ -60,15 +63,32 @@ export interface BigDataTableTransformedData {
   rows: RowData[]
 }
 
+export interface ContextMenuRenderer {
+  rowId: ID
+  columnId: ID
+  pinnedRow?: boolean
+  pinnedColumn?: boolean
+}
+
 export interface BigDataTableProps {
+  disableSelection?: boolean
   disablePinnedColumns?: boolean
   disablePinnedRows?: boolean
-  onSelectionChange: (selection: ID[]) => void
-  onSelectionAllChange: (selected: boolean) => void
-  data?: BigDataTableData
+  onSelectionChange?: (selection: ID[]) => void
+  onSelectionAllChange?: (selected: boolean) => void
+  onViewChange?: (view: BigDataTableCurrentView) => void
+  data: BigDataTableData
   defaultColumnWidth?: number
   rowHeight?: number
   theme?: any
+  contextMenuRenderer?: (_: ContextMenuRenderer) => JSX.Element[]
+  shortcuts?: {
+    [key: string]: {
+      multiple?: boolean
+      handler: (rowId: ID, columnId: ID) => void
+    }
+  }
+  fetchNextPage?: () => void
 }
 
 export interface ScrollState {

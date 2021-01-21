@@ -12,6 +12,15 @@ export const Wrapper = styled.div`
   font-size: ${({ theme }) => theme.fontSize}px;
   line-height: ${({ theme }) => theme.fontSize / 10};
   user-select: none;
+
+  &.resizing {
+    cursor: e-resize !important;
+  }
+
+  &.reordering {
+    cursor: grabbing;
+  }
+
   &:after {
     content: '';
     position: absolute;

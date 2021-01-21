@@ -39,7 +39,11 @@ export const Cell: React.FC<Props> = ({
   pinnedRow,
   pinnedColumn,
 }) => {
-  const { context, view, hovered } = useTable()
+  const { context, view, hovered, config } = useTable()
+
+  const customMenuItems = config.contextMenuRenderer
+    ? config.contextMenuRenderer({ rowId, columnId, pinnedRow, pinnedColumn })
+    : []
 
   const menuItems = [
     <MenuItem
@@ -52,6 +56,7 @@ export const Cell: React.FC<Props> = ({
       text={pinnedColumn ? 'Unpin column' : 'Pin column'}
       key={`pin-column-${rowId}-${columnId}`}
     />,
+    ...customMenuItems,
   ]
 
   return (
