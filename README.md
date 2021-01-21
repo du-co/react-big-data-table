@@ -39,17 +39,17 @@ const MyComponent = () => {
 {
   "columns": [
     {
-      "id": string | number,
-      "key": string
+      "id": 0,
+      "key": "Column title"
     }
   ],
   "rows": [
     {
-      "id": string | number,
+      "id": 0,
       "columns": [
         {
-          "columnId": string | number,
-          "data": any
+          "columnId": 0,
+          "data": "My cell data"
         }
       ]
     }
