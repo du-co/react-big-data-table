@@ -64,7 +64,7 @@ export const Cell: React.FC<Props> = ({
     )
   }
 
-  if (!config.disablePinnedColumns) {
+  if (!config.disablePinnedColumns && !(columnIndex < 0)) {
     menuItems.unshift(
       <MenuItem
         onClick={view.pin.column(columnId, !pinnedColumn)}

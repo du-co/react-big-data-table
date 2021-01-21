@@ -7,6 +7,7 @@ import {
   ResizeIndicator,
   ReorderIndicator,
   GhostImage,
+  Selection,
 } from './components'
 
 import { Provider } from './context'
@@ -136,8 +137,11 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
       >
         <Wrapper
           ref={wrapperRef}
-          onMouseLeave={() => menuState.visible ? null : setHovered({ row: null, column: null })}
+          onMouseLeave={() =>
+            menuState.visible ? null : setHovered({ row: null, column: null })
+          }
         >
+          {!config.disableSelection && <Selection />}
           {!config.disablePinnedColumns && pinnedColumns.length > 0 && (
             <Grid pinned />
           )}

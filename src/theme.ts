@@ -4,7 +4,7 @@ export default {
   borderColorPinned: '#c0c0c0',
   borderColorHeader: '#c0c0c0',
   borderWidth: 1,
-  borderWidthPinned: 4,
+  borderWidthPinned: 3,
   backgroundHeader: '#f8f9fa',
   backgroundHeaderHover: '#e8eaed',
   backgroundMenuItem: '#f1f3f4',
