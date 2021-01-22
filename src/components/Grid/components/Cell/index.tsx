@@ -50,6 +50,7 @@ interface Props {
   columnId: ID
   pinnedRow?: boolean
   pinnedColumn?: boolean
+  copyText?: string
 }
 
 export const Cell: React.FC<Props> = ({

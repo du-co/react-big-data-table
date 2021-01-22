@@ -24,7 +24,17 @@ const filter = (arr: any[], fn: (_: any) => boolean) => {
   return results
 }
 
+const copy = (str: string) => {
+  const el = document.createElement('textarea')
+  el.value = str
+  document.body.appendChild(el)
+  el.select()
+  document.execCommand('copy')
+  document.body.removeChild(el)
+}
+
 export default {
   find,
   filter,
+  copy,
 }

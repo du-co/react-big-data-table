@@ -159,4 +159,5 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
 }
 
 export default BigDataTable
+export { MenuItem } from './components'
 export * from './types'

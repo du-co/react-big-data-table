@@ -7,9 +7,10 @@ interface Props {
   text: string
   shortcut?: string
   selected?: boolean
+  divider?: boolean
 }
 
-const Button = styled.button<{ selected?: boolean }>`
+const Button = styled.button<{ selected?: boolean; divider?: boolean }>`
   display: block;
   border: none;
   background: none;
@@ -29,15 +30,22 @@ const Button = styled.button<{ selected?: boolean }>`
       background: ${theme.backgroundHeaderHover};
     }
   `}
+
+  ${({ theme, divider }) =>
+    divider &&
+    `
+    border-bottom: 1px solid ${theme.borderColor}
+  `}
 `
 const Inner = styled.div`
   display: flex;
   align-items: center;
 `
 const Shortcut = styled.span`
-  color: rgba(0, 0, 0, 0.25);
+  color: rgba(0, 0, 0, 0.3);
   margin-left: auto;
-  padding-left: 1eem;
+  padding-left: 1em;
+  font-style: italic;
 `
 
 export const MenuItem: React.FC<Props> = ({
@@ -45,10 +53,15 @@ export const MenuItem: React.FC<Props> = ({
   text,
   shortcut,
   selected,
+  divider,
 }) => {
   const { context } = useTable()
   return (
-    <Button onClick={context.triggerMenuAction(onClick)} selected={selected}>
+    <Button
+      onClick={context.triggerMenuAction(onClick)}
+      selected={selected}
+      divider={divider}
+    >
       <Inner>
         {text}
         {shortcut && <Shortcut>{shortcut}</Shortcut>}
