@@ -29,7 +29,18 @@ const Wrapper = styled.div`
   }
 `
 
-const SelectAll = styled.div<{ rowHeight: number }>`
+const Placer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+
+  input {
+    margin: 0;
+  }
+`
+const SelectAll = styled(Placer)<{ rowHeight: number }>`
   background: ${({ theme }) => theme.backgroundHeader};
   height: ${({ rowHeight }) => rowHeight}px;
   box-sizing: border-box;
@@ -45,7 +56,7 @@ const Spacer = styled.div`
 `
 
 export const Selection = () => {
-  const { config, view, scroll, updateScroll, data } = useTable()
+  const { config, view, scroll, updateScroll, data, selection } = useTable()
 
   const onScrollPinned = ({ scrollTop }: OnScrollParams) => {
     if (scrollTop === scroll.main.pinned.top) return
@@ -89,14 +100,26 @@ export const Selection = () => {
         columnId={-1}
         columnIndex={-1}
       >
-        {id}
+        <Placer>
+          <input
+            type="checkbox"
+            checked={selection.isItemSelected(id) || selection.isAllSelected}
+            onChange={() => selection.toggleItemSelection(id)}
+          />
+        </Placer>
       </Cell>
     )
   }
 
   return (
     <Wrapper>
-      <SelectAll rowHeight={config.rowHeight}>C</SelectAll>
+      <SelectAll rowHeight={config.rowHeight}>
+        <input
+          type="checkbox"
+          checked={selection.isAllSelected}
+          onChange={() => selection.toggleSelectAll()}
+        />
+      </SelectAll>
       {!config.disablePinnedRows && view.pinnedRows.length > 0 && (
         <PinnedRow
           style={{ height: view.pinnedRows.length * config.rowHeight }}

@@ -38,6 +38,13 @@ export interface ContextProps {
     column: ID | null
     update: (_: HoverState) => void
   }
+  selection: {
+    selection: ID[]
+    isItemSelected: (_: ID) => boolean
+    toggleItemSelection: (_: ID) => void
+    toggleSelectAll: () => void
+    isAllSelected: boolean
+  }
 }
 
 const defaultViewAction = () => {}
@@ -93,6 +100,13 @@ const context = createContext<ContextProps>({
     row: null,
     column: null,
     update: defaultViewAction,
+  },
+  selection: {
+    selection: [],
+    isItemSelected: () => false,
+    toggleItemSelection: defaultViewAction,
+    toggleSelectAll: defaultViewAction,
+    isAllSelected: false,
   },
 })
 

@@ -17,6 +17,7 @@ import {
   usePinnedRows,
   useColumnResize,
   useColumnReorder,
+  useSelection,
 } from './hooks'
 import { BigDataTableProps, HoverState } from './types'
 import defaultTheme from './theme'
@@ -47,6 +48,7 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
   })
 
   const wrapperRef = useRef<HTMLDivElement>((null as unknown) as HTMLDivElement)
+  const selection = useSelection()
   const { pinnedColumns, pinColumn, updatePinnedColumns } = usePinnedColumns()
   const { pinnedRows, pinRow } = usePinnedRows()
   const { initializeResize, columnSizes, resizeIndicator } = useColumnResize(
@@ -89,6 +91,18 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
     }
   }, [pinnedColumns, pinnedRows, columnOrder, columnSizes])
 
+  useEffect(() => {
+    if (config.onSelectionChange) {
+      config.onSelectionChange(selection.selection)
+    }
+  }, [selection.selection])
+
+  useEffect(() => {
+    if (config.onSelectionAllChange) {
+      config.onSelectionAllChange(selection.isAllSelected)
+    }
+  }, [selection.isAllSelected])
+
   return (
     <Provider
       value={{
@@ -127,6 +141,7 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
           defaultColumnWidth,
           rowHeight,
         },
+        selection,
       }}
     >
       <ThemeProvider
