@@ -37,16 +37,7 @@ const Template: Story<BigDataTableProps> = () => (
       position: 'relative',
     }}
   >
-    <BigDataTable
-      data={data}
-      contextMenuRenderer={({ columnId, rowId, pinnedRow, pinnedColumn }) => [
-        <p key="1">Column {columnId}</p>,
-        <p key="2">Row {rowId}</p>,
-        <p key="3">Column pinned: {pinnedColumn ? 'Yes' : 'No'}</p>,
-        <p key="4">Row pinned: {pinnedRow ? 'Yes' : 'No'}</p>,
-      ]}
-      onViewChange={(view) => console.log('View change:', view)}
-    />
+    <BigDataTable data={data} />
   </div>
 )
 
