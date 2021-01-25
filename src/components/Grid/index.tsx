@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react'
 import { Index } from 'react-virtualized'
-import { useTable } from '../../context'
+import { useConfig, useData, useScroll, useView } from '../../context'
 import { Column, Row, Header, Pinned, Main } from './components'
 
 interface Props {
@@ -8,15 +8,18 @@ interface Props {
 }
 
 export const Grid: React.FC<Props> = ({ pinned }) => {
-  const { data, config, view, scroll } = useTable()
+  const view = useView()
+  const data = useData()
+  const config = useConfig()
+  const scroll = useScroll()
   const headerGrid = useRef<any>(null)
   const mainGrid = useRef<any>(null)
   const pinnedGrid = useRef<any>(null)
   const columns = pinned ? data.pinnedColumns : data.columns
 
   const scrollLeft = pinned
-    ? scroll.pinned.default.left
-    : scroll.main.default.left
+    ? scroll.positions.pinned.default.left
+    : scroll.positions.main.default.left
 
   const columnWidth = useMemo(
     () =>
@@ -40,7 +43,7 @@ export const Grid: React.FC<Props> = ({ pinned }) => {
     headerGrid.current?.measureAllCells()
     mainGrid.current?.measureAllCells()
     pinnedGrid.current?.measureAllCells()
-  }, [view.columnSizes, view.columnOrder, view.pinnedColumns])
+  }, [view.columnSizes])
 
   return (
     <Row style={{ width: pinned ? columnWidth : 'auto' }} pinned={pinned}>

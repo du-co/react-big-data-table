@@ -6,7 +6,7 @@ import {
   OnScrollParams,
 } from 'react-virtualized'
 import { PinnedRow, Row, Cell, Scrollbar } from '../'
-import { useTable } from '../../../../context'
+import { useConfig, useData, useScroll, useView } from '../../../../context'
 import { GridProps } from '../../../../types'
 import utils from '../../../../utils'
 
@@ -17,7 +17,10 @@ export const Pinned: React.FC<GridProps> = ({
   scrollX,
   calculateColumnWidth,
 }) => {
-  const { view, config, data, scroll, updateScroll } = useTable()
+  const view = useView()
+  const config = useConfig()
+  const data = useData()
+  const scroll = useScroll()
   const keyPrefix = pinned ? 'pinned' : 'main'
 
   const cellRenderer: GridCellRenderer = ({ style, columnIndex, rowIndex }) => {
@@ -49,13 +52,17 @@ export const Pinned: React.FC<GridProps> = ({
   }
 
   const onScroll = ({ scrollLeft, scrollTop }: OnScrollParams) => {
-    if (scrollTop === scroll.main.pinned.top && scrollLeft === scrollX) return
-    updateScroll({
-      ...scroll,
+    if (
+      scrollTop === scroll.positions.main.pinned.top &&
+      scrollLeft === scrollX
+    )
+      return
+    scroll.update({
+      ...scroll.positions,
       main: {
         default: {
-          ...scroll.main.default,
-          left: pinned ? scroll.main.default.left : scrollLeft,
+          ...scroll.positions.main.default,
+          left: pinned ? scroll.positions.main.default.left : scrollLeft,
         },
         pinned: {
           top: scrollTop,
@@ -63,7 +70,7 @@ export const Pinned: React.FC<GridProps> = ({
       },
       pinned: {
         default: {
-          left: pinned ? scrollLeft : scroll.pinned.default.left,
+          left: pinned ? scrollLeft : scroll.positions.pinned.default.left,
         },
       },
     })
@@ -71,7 +78,7 @@ export const Pinned: React.FC<GridProps> = ({
 
   const handleScrollbar = (position: number) => {
     innerRef.current.handleScrollEvent({
-      scrollLeft: scroll.main.default.left,
+      scrollLeft: scroll.positions.main.default.left,
       scrollTop: position,
     })
   }
@@ -91,7 +98,7 @@ export const Pinned: React.FC<GridProps> = ({
               rowCount={view.pinnedRows.length}
               rowHeight={config.rowHeight}
               scrollLeft={scrollX}
-              scrollTop={scroll.main.pinned.top}
+              scrollTop={scroll.positions.main.pinned.top}
               tabIndex={-1}
               width={width}
             />
@@ -103,7 +110,7 @@ export const Pinned: React.FC<GridProps> = ({
           pullUp
           gridRef={innerRef}
           pinned
-          scrollTop={scroll.main.pinned.top}
+          scrollTop={scroll.positions.main.pinned.top}
           updateScroll={handleScrollbar}
         />
       )}

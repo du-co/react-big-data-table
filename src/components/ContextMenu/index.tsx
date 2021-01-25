@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { useTable } from '../../context'
+import { useMenu } from '../../context'
 
 interface MenuProps {
   x: number
@@ -44,7 +44,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
   innerRef,
 }) => {
   const [selected, updateSelected] = useState(0)
-  const { context } = useTable()
+  const menu = useMenu()
 
   useEffect(() => {
     updateSelected(0)
@@ -67,7 +67,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
       const update = selected - 1
       updateSelected(update < 0 ? items!.length - 1 : update)
     } else if (e.key === 'Enter') {
-      context.triggerMenuAction(items![selected].props.onClick)()
+      menu.triggerMenuAction(items![selected].props.onClick)()
     }
   }
 

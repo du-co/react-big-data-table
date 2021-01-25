@@ -19,3 +19,5 @@ export const DEFAULT_SCROLL_STATE = {
 }
 export const SCROLLBAR_HANDLE_SIZE = 8
 export const MIN_SCROLLBAR_HANDLE_SIZE = 32
+export const DEFAULT_ACTION = () => {}
+export const DEFAULT_CURRY = () => DEFAULT_ACTION

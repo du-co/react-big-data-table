@@ -1,5 +1,6 @@
 export * from './useColumnReorder'
 export * from './useColumnResize'
+export * from './useContextMenu'
 export * from './usePinnedColumns'
 export * from './usePinnedRows'
 export * from './useSelection'

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useTable } from '../../../../context'
+import { useConfig, useHovers, useMenu, useView } from '../../../../context'
 import { ID } from '../../../../types'
 import { MenuItem } from '../../../MenuItem'
 
@@ -16,8 +16,7 @@ const Wrapper = styled.div<WrapperProps>`
   border: ${({ theme }) => `${theme.borderWidth}px solid ${theme.borderColor}`};
   border-right: none;
   border-bottom: none;
-  background: ${({ theme, hovered }) =>
-    hovered ? theme.backgroundMenuItem : 'transparent'};
+  background: ${({ theme, hovered }) => (hovered ? theme.backgroundMenuItem : 'transparent')};
 
   .resizing & {
     pointer-events: none;
@@ -63,7 +62,10 @@ export const Cell: React.FC<Props> = ({
   pinnedRow,
   pinnedColumn,
 }) => {
-  const { context, view, hovered, config } = useTable()
+  const view = useView()
+  const menu = useMenu()
+  const hovered = useHovers()
+  const config = useConfig()
 
   const customMenuItems = config.contextMenuRenderer
     ? config.contextMenuRenderer({ rowId, columnId, pinnedRow, pinnedColumn })
@@ -98,7 +100,7 @@ export const Cell: React.FC<Props> = ({
         menuItems.length === 0 || columnIndex < 0
           ? undefined
           : (e) => {
-              context.onContextMenu(menuItems)(e)
+              menu.onContextMenu(menuItems)(e)
               hovered.update({
                 row: rowId,
                 column: columnId,
@@ -113,7 +115,7 @@ export const Cell: React.FC<Props> = ({
       }
       hovered={hovered.row === rowId}
       onDragOver={view.reorder.reorder(columnIndex, pinnedColumn)}
-      killEvents={context.menuState.visible}
+      killEvents={menu.menuState.visible}
       columnIndex={columnIndex}
       rowIndex={rowIndex}
     >
