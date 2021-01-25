@@ -6,7 +6,7 @@ import {
   OnScrollParams,
 } from 'react-virtualized'
 import { HeaderRow, Row, HeaderCell, Spacer } from '../'
-import { useTable } from '../../../../context'
+import { useConfig, useScroll } from '../../../../context'
 import { GridProps } from '../../../../types'
 
 export const Header: React.FC<GridProps> = ({
@@ -16,7 +16,8 @@ export const Header: React.FC<GridProps> = ({
   scrollX,
   calculateColumnWidth,
 }) => {
-  const { config, scroll, updateScroll } = useTable()
+  const config = useConfig()
+  const scroll = useScroll()
   const keyPrefix = pinned ? 'pinned' : 'main'
 
   const cellRenderer: GridCellRenderer = ({ style, columnIndex }) => {
@@ -42,18 +43,18 @@ export const Header: React.FC<GridProps> = ({
 
   const onScroll = ({ scrollLeft }: OnScrollParams) => {
     if (scrollLeft === scrollX) return
-    updateScroll({
-      ...scroll,
+    scroll.update({
+      ...scroll.positions,
       main: {
-        ...scroll.main,
+        ...scroll.positions.main,
         default: {
-          ...scroll.main.default,
-          left: pinned ? scroll.main.default.left : scrollLeft,
+          ...scroll.positions.main.default,
+          left: pinned ? scroll.positions.main.default.left : scrollLeft,
         },
       },
       pinned: {
         default: {
-          left: pinned ? scrollLeft : scroll.pinned.default.left,
+          left: pinned ? scrollLeft : scroll.positions.pinned.default.left,
         },
       },
     })

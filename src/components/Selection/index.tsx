@@ -6,7 +6,13 @@ import {
   OnScrollParams,
 } from 'react-virtualized'
 import styled from 'styled-components'
-import { useTable } from '../../context'
+import {
+  useConfig,
+  useData,
+  useView,
+  useScroll,
+  useSelection,
+} from '../../context'
 import { Cell, PinnedRow, Row } from '../Grid/components'
 
 const Wrapper = styled.div`
@@ -56,14 +62,18 @@ const Spacer = styled.div`
 `
 
 export const Selection = () => {
-  const { config, view, scroll, updateScroll, data, selection } = useTable()
+  const config = useConfig()
+  const view = useView()
+  const scroll = useScroll()
+  const data = useData()
+  const selection = useSelection()
 
   const onScrollPinned = ({ scrollTop }: OnScrollParams) => {
-    if (scrollTop === scroll.main.pinned.top) return
-    updateScroll({
-      ...scroll,
+    if (scrollTop === scroll.positions.main.pinned.top) return
+    scroll.update({
+      ...scroll.positions,
       main: {
-        ...scroll.main,
+        ...scroll.positions.main,
         pinned: {
           top: scrollTop,
         },
@@ -72,13 +82,13 @@ export const Selection = () => {
   }
 
   const onScroll = ({ scrollTop }: OnScrollParams) => {
-    if (scrollTop === scroll.main.default.top) return
-    updateScroll({
-      ...scroll,
+    if (scrollTop === scroll.positions.main.default.top) return
+    scroll.update({
+      ...scroll.positions,
       main: {
-        ...scroll.main,
+        ...scroll.positions.main,
         default: {
-          left: scroll.main.default.left,
+          left: scroll.positions.main.default.left,
           top: scrollTop,
         },
       },
@@ -137,7 +147,7 @@ export const Selection = () => {
                   cellRenderer={cellRenderer(true)}
                   tabIndex={-1}
                   onScroll={onScrollPinned}
-                  scrollTop={scroll.main.pinned.top}
+                  scrollTop={scroll.positions.main.pinned.top}
                 />
               )}
             </AutoSizer>
@@ -158,7 +168,7 @@ export const Selection = () => {
               cellRenderer={cellRenderer(false)}
               tabIndex={-1}
               onScroll={onScroll}
-              scrollTop={scroll.main.default.top}
+              scrollTop={scroll.positions.main.default.top}
             />
           )}
         </AutoSizer>

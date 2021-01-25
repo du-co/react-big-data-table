@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useTable } from '../../../../context'
+import { useConfig, useHovers, useMenu, useView } from '../../../../context'
 import { ID } from '../../../../types'
 import { MenuItem } from '../../../MenuItem'
 
@@ -79,7 +79,10 @@ export const HeaderCell: React.FC<Props> = ({
   columnId,
   pinned,
 }) => {
-  const { context, view, hovered, config } = useTable()
+  const menu = useMenu()
+  const view = useView()
+  const hovered = useHovers()
+  const config = useConfig()
 
   const menuItems = []
 
@@ -97,7 +100,7 @@ export const HeaderCell: React.FC<Props> = ({
     <Wrapper
       style={style}
       onContextMenu={
-        menuItems.length === 0 ? undefined : context.onContextMenu(menuItems)
+        menuItems.length === 0 ? undefined : menu.onContextMenu(menuItems)
       }
       hovered={hovered.column === columnId}
       onDragOver={view.reorder.reorder(index, pinned)}
