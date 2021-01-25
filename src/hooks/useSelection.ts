@@ -6,11 +6,14 @@ export const useSelection = () => {
   const [selection, updateSelection] = useState<ID[]>([])
 
   const toggleItemSelection = (id: ID) => {
-    const index = selection.indexOf(id)
-    const selected = index > -1
-    updateSelection(
-      selected ? [...selection].splice(index, 1) : [...selection, id]
-    )
+    const update = [...selection]
+    const index = update.indexOf(id)
+    if (index > -1) {
+      update.splice(index, 1)
+    } else {
+      update.push(id)
+    }
+    updateSelection(update)
   }
 
   const toggleSelectAll = () => {

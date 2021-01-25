@@ -4,10 +4,7 @@ import { Index } from 'react-virtualized'
 export type ID = number
 export type ViewAction = (_: ID) => void
 export type PinAction = (_id: ID, _pin: boolean) => () => void
-export type ReorderAction = (
-  _: number,
-  pinned?: boolean
-) => (_: React.DragEvent) => void
+export type ReorderAction = (_: number, pinned?: boolean) => (_: React.DragEvent) => void
 
 export interface ColumnData {
   id: ID
@@ -93,7 +90,7 @@ export interface BigDataTableProps {
   data: BigDataTableData
   defaultColumnWidth?: number
   rowHeight?: number
-  theme?: any
+  theme?: Theme
   contextMenuRenderer?: ContextMenuRenderer
   cellRenderer?: CellRenderer
   headerCellRenderer?: HeaderCellRenderer
@@ -134,4 +131,21 @@ export interface GridProps {
 export interface HoverState {
   row: ID | null
   column: ID | null
+}
+
+export interface Theme {
+  primaryColor?: string
+  borderColor?: string
+  borderColorPinned?: string
+  borderColorHeader?: string
+  borderWidth?: number
+  borderWidthPinned?: number
+  backgroundHeader?: string
+  backgroundHeaderHover?: string
+  backgroundMenuItem?: string
+  handleBackground?: string
+  handleBackgroundHover?: string
+  handleBackgroundActive?: string
+  fontSize?: number
+  fontFamily?: string
 }

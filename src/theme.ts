@@ -1,4 +1,6 @@
-export default {
+import { Theme } from './types'
+
+const theme: Theme = {
   primaryColor: '#007bff',
   borderColor: '#e2e3e3',
   borderColorPinned: '#c0c0c0',
@@ -15,3 +17,5 @@ export default {
   fontFamily:
     '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";',
 }
+
+export default theme
