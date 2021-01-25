@@ -32,12 +32,10 @@ export const useColumnReorder = (
     [pinnedColumns, columnOrder]
   )
 
-  const initializeReorder = (index: number, pinned?: boolean) => (
-    e: React.DragEvent
-  ) => {
+  const initializeReorder = (index: number, pinned?: boolean) => (e: React.DragEvent) => {
     const handle = e.currentTarget as HTMLDivElement
     wrapperRef.current.classList.add('reordering')
-    if (e.dataTransfer) {
+    if (e.dataTransfer && e.dataTransfer.setDragImage) {
       e.dataTransfer.setDragImage(document.createElement('div'), 0, 0)
     }
     reorder.current = {
@@ -48,9 +46,7 @@ export const useColumnReorder = (
       offset: wrapperRef.current.getBoundingClientRect().left,
     }
     if (ghostImage.current) {
-      ghostImage.current.style.width = `${
-        (handle.parentNode as HTMLDivElement).offsetWidth
-      }px`
+      ghostImage.current.style.width = `${(handle.parentNode as HTMLDivElement).offsetWidth}px`
       ghostImage.current.style.left = `${e.clientX - reorder.current.offset}px`
       ghostImage.current.classList.add('isMoving')
     }
@@ -62,9 +58,7 @@ export const useColumnReorder = (
     }
   }
 
-  const reorderColumn = (index: number, pinned?: boolean) => (
-    e: React.DragEvent
-  ) => {
+  const reorderColumn = (index: number, pinned?: boolean) => (e: React.DragEvent) => {
     const { current: column } = reorder
     const { current: indicator } = reorderIndicator
     if (pinned !== column.pinned) return
