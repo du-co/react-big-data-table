@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useTable } from '../../context'
+import { useMenu } from '../../context'
 
 interface Props {
   onClick: () => void
@@ -55,10 +55,10 @@ export const MenuItem: React.FC<Props> = ({
   selected,
   divider,
 }) => {
-  const { context } = useTable()
+  const menu = useMenu()
   return (
     <Button
-      onClick={context.triggerMenuAction(onClick)}
+      onClick={menu.triggerMenuAction(onClick)}
       selected={selected}
       divider={divider}
     >

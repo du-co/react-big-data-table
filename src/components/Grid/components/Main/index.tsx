@@ -6,7 +6,7 @@ import {
   OnScrollParams,
 } from 'react-virtualized'
 import { Row, Scrollbar, Cell } from '../'
-import { useTable } from '../../../../context'
+import { useConfig, useData, useScroll, useView } from '../../../../context'
 import { GridProps } from '../../../../types'
 import utils from '../../../../utils'
 
@@ -17,7 +17,10 @@ export const Main: React.FC<GridProps> = ({
   scrollX,
   calculateColumnWidth,
 }) => {
-  const { config, data, scroll, updateScroll, view } = useTable()
+  const config = useConfig()
+  const data = useData()
+  const scroll = useScroll()
+  const view = useView()
   const keyPrefix = pinned ? 'pinned' : 'main'
 
   const cellRenderer: GridCellRenderer = ({ style, columnIndex, rowIndex }) => {
@@ -49,19 +52,23 @@ export const Main: React.FC<GridProps> = ({
   }
 
   const onScroll = ({ scrollLeft, scrollTop }: OnScrollParams) => {
-    if (scrollTop === scroll.main.default.top && scrollLeft === scrollX) return
-    updateScroll({
-      ...scroll,
+    if (
+      scrollTop === scroll.positions.main.default.top &&
+      scrollLeft === scrollX
+    )
+      return
+    scroll.update({
+      ...scroll.positions,
       main: {
-        ...scroll.main,
+        ...scroll.positions.main,
         default: {
           top: scrollTop,
-          left: pinned ? scroll.main.default.left : scrollLeft,
+          left: pinned ? scroll.positions.main.default.left : scrollLeft,
         },
       },
       pinned: {
         default: {
-          left: pinned ? scrollLeft : scroll.pinned.default.left,
+          left: pinned ? scrollLeft : scroll.positions.pinned.default.left,
         },
       },
     })
@@ -70,13 +77,13 @@ export const Main: React.FC<GridProps> = ({
   const handleScrollbarX = (position: number) => {
     innerRef.current.handleScrollEvent({
       scrollLeft: position,
-      scrollTop: scroll.main.default.top,
+      scrollTop: scroll.positions.main.default.top,
     })
   }
 
   const handleScrollbarY = (position: number) => {
     innerRef.current.handleScrollEvent({
-      scrollLeft: scroll.main.default.left,
+      scrollLeft: scroll.positions.main.default.left,
       scrollTop: position,
     })
   }
@@ -97,7 +104,7 @@ export const Main: React.FC<GridProps> = ({
                 rowCount={data.rows.length}
                 rowHeight={config.rowHeight}
                 scrollLeft={scrollX}
-                scrollTop={scroll.main.default.top}
+                scrollTop={scroll.positions.main.default.top}
                 tabIndex={-1}
                 width={width}
               />
@@ -109,7 +116,7 @@ export const Main: React.FC<GridProps> = ({
             corner
             gridRef={innerRef}
             pullUp={!pinned && view.pinnedRows.length === 0}
-            scrollTop={scroll.main.default.top}
+            scrollTop={scroll.positions.main.default.top}
             updateScroll={handleScrollbarY}
           />
         )}

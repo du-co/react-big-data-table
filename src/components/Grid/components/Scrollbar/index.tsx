@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import { useScrollbar } from './hooks'
 import { Props } from './types'
 import { Wrapper, Container, Handle } from './components'
-import { useTable } from '../../../../context'
+import { useConfig } from '../../../../context'
 
 export const Scrollbar: React.FC<Props> = ({
   pinned,
@@ -15,7 +15,7 @@ export const Scrollbar: React.FC<Props> = ({
   pullUp,
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null)
-  const { config } = useTable()
+  const config = useConfig()
 
   const {
     shouldScroll,

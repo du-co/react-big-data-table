@@ -9,8 +9,6 @@ import {
   GhostImage,
   Selection,
 } from './components'
-
-import { Provider } from './context'
 import {
   useTableData,
   usePinnedColumns,
@@ -18,15 +16,21 @@ import {
   useColumnResize,
   useColumnReorder,
   useSelection,
+  useContextMenu,
 } from './hooks'
 import { BigDataTableProps, HoverState } from './types'
 import defaultTheme from './theme'
+import { DEFAULT_SCROLL_STATE, DEFAULT_COLUMN_WIDTH, DEFAULT_ROW_HEIGHT } from './consts'
+
 import {
-  DEFAULT_SCROLL_STATE,
-  DEFAULT_COLUMN_WIDTH,
-  DEFAULT_ROW_HEIGHT,
-} from './consts'
-import { useContextMenu } from './hooks/useContextMenu'
+  ConfigProvider,
+  MenuProvider,
+  DataProvider,
+  HoverProvider,
+  ScrollProvider,
+  SelectionProvider,
+  ViewProvider,
+} from './context'
 
 const BigDataTable: React.FC<BigDataTableProps> = ({
   data,
@@ -35,13 +39,7 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
   rowHeight = DEFAULT_ROW_HEIGHT,
   ...config
 }) => {
-  const {
-    menuChildren,
-    menuState,
-    menuRef,
-    onContextMenu,
-    triggerMenuAction,
-  } = useContextMenu()
+  const { menuChildren, menuState, menuRef, onContextMenu, triggerMenuAction } = useContextMenu()
   const [hovered, setHovered] = useState<HoverState>({
     row: null,
     column: null,
@@ -51,9 +49,7 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
   const selection = useSelection()
   const { pinnedColumns, pinColumn, updatePinnedColumns } = usePinnedColumns()
   const { pinnedRows, pinRow } = usePinnedRows()
-  const { initializeResize, columnSizes, resizeIndicator } = useColumnResize(
-    wrapperRef
-  )
+  const { initializeResize, columnSizes, resizeIndicator } = useColumnResize(wrapperRef)
   const defaultColumnOrder = data.columns.map((c) => c.id)
   const {
     initializeReorder,
@@ -64,12 +60,7 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
     reorderIndicator,
     ghostImage,
     onDrag,
-  } = useColumnReorder(
-    wrapperRef,
-    defaultColumnOrder,
-    pinnedColumns,
-    updatePinnedColumns
-  )
+  } = useColumnReorder(wrapperRef, defaultColumnOrder, pinnedColumns, updatePinnedColumns)
 
   const transformedData = useTableData({
     data,
@@ -104,72 +95,84 @@ const BigDataTable: React.FC<BigDataTableProps> = ({
   }, [selection.isAllSelected])
 
   return (
-    <Provider
+    <ConfigProvider
       value={{
-        scroll,
-        updateScroll,
-        context: {
+        ...config,
+        defaultColumnWidth,
+        rowHeight,
+      }}
+    >
+      <MenuProvider
+        value={{
           onContextMenu,
           triggerMenuAction,
           menuState,
-        },
-        view: {
-          pinnedColumns,
-          pinnedRows,
-          columnOrder,
-          columnSizes,
-          pin: {
-            column: pinColumn,
-            row: pinRow,
-          },
-          resize: initializeResize,
-          reorder: {
-            dragging,
-            initialize: initializeReorder,
-            drag: onDrag,
-            reorder: reorderColumn,
-            confirm: confirmReorder,
-          },
-        },
-        hovered: {
-          ...hovered,
-          update: setHovered,
-        },
-        data: transformedData,
-        config: {
-          ...config,
-          defaultColumnWidth,
-          rowHeight,
-        },
-        selection,
-      }}
-    >
-      <ThemeProvider
-        theme={{
-          ...defaultTheme,
-          ...theme,
         }}
       >
-        <Wrapper
-          ref={wrapperRef}
-          onMouseLeave={() =>
-            menuState.visible ? null : setHovered({ row: null, column: null })
-          }
-        >
-          {!config.disableSelection && <Selection />}
-          {!config.disablePinnedColumns && pinnedColumns.length > 0 && (
-            <Grid pinned />
-          )}
-          <Grid />
-          <ResizeIndicator ref={resizeIndicator} rowHeight={rowHeight} />
-          <ReorderIndicator ref={reorderIndicator} />
-          <GhostImage ref={ghostImage} rowHeight={rowHeight} />
-          <ContextMenu menuState={menuState} innerRef={menuRef}>
-            {menuChildren}
-          </ContextMenu>
-        </Wrapper>
-      </ThemeProvider>
-    </Provider>
+        <DataProvider value={transformedData}>
+          <HoverProvider
+            value={{
+              ...hovered,
+              update: setHovered,
+            }}
+          >
+            <ScrollProvider
+              value={{
+                positions: scroll,
+                update: updateScroll,
+              }}
+            >
+              <SelectionProvider value={selection}>
+                <ViewProvider
+                  value={{
+                    pinnedColumns,
+                    pinnedRows,
+                    columnOrder,
+                    columnSizes,
+                    pin: {
+                      column: pinColumn,
+                      row: pinRow,
+                    },
+                    resize: initializeResize,
+                    reorder: {
+                      dragging,
+                      initialize: initializeReorder,
+                      drag: onDrag,
+                      reorder: reorderColumn,
+                      confirm: confirmReorder,
+                    },
+                  }}
+                >
+                  <ThemeProvider
+                    theme={{
+                      ...defaultTheme,
+                      ...theme,
+                    }}
+                  >
+                    <Wrapper
+                      ref={wrapperRef}
+                      onMouseLeave={() =>
+                        menuState.visible ? null : setHovered({ row: null, column: null })
+                      }
+                    >
+                      {!config.disableSelection && <Selection />}
+                      {!config.disablePinnedColumns && pinnedColumns.length > 0 && <Grid pinned />}
+                      <Grid />
+                      <ResizeIndicator ref={resizeIndicator} rowHeight={rowHeight} />
+                      <ReorderIndicator ref={reorderIndicator} />
+                      <GhostImage ref={ghostImage} rowHeight={rowHeight} />
+                      <ContextMenu menuState={menuState} innerRef={menuRef}>
+                        {menuChildren}
+                      </ContextMenu>
+                    </Wrapper>
+                  </ThemeProvider>
+                </ViewProvider>
+              </SelectionProvider>
+            </ScrollProvider>
+          </HoverProvider>
+        </DataProvider>
+      </MenuProvider>
+    </ConfigProvider>
   )
 }
 
