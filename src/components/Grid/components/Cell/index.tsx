@@ -105,7 +105,7 @@ export const Cell: React.FC<Props> = memo(
               row: rowId,
               column: columnId,
             }),
-          []
+          [rowId, columnId, hovered]
         )}
         hovered={hovered.row === rowId}
         onDragOver={view.reorder.reorder(columnIndex, pinnedColumn)}

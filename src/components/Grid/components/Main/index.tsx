@@ -9,9 +9,9 @@ import utils from '../../../../utils'
 
 export const Main: React.FC<GridProps> = memo(
   ({ columns, innerRef, pinned, scrollX, calculateColumnWidth }) => {
-    const config = useConfig()
+    const { cellRenderer: cellRendererProp, ...config } = useConfig()
     const data = useData()
-    const scroll = useScroll()
+    const { positions, update } = useScroll()
     const view = useView()
     const keyPrefix = pinned ? 'pinned' : 'main'
 
@@ -31,8 +31,8 @@ export const Main: React.FC<GridProps> = memo(
             columnId={column.id}
             style={style}
           >
-            {config.cellRenderer
-              ? config.cellRenderer({
+            {cellRendererProp
+              ? cellRendererProp({
                   rowId: row.id,
                   columnId: column.id,
                   pinnedColumn: pinned,
@@ -43,49 +43,49 @@ export const Main: React.FC<GridProps> = memo(
           </Cell>
         )
       },
-      [data.rows, columns, config.cellRenderer, pinned]
+      [data.rows, columns, cellRendererProp, pinned, keyPrefix]
     )
 
     const onScroll = useCallback(
       ({ scrollLeft, scrollTop }: OnScrollParams) => {
-        if (scrollTop === scroll.positions.main.default.top && scrollLeft === scrollX) return
-        scroll.update({
-          ...scroll.positions,
+        if (scrollTop === positions.main.default.top && scrollLeft === scrollX) return
+        update({
+          ...positions,
           main: {
-            ...scroll.positions.main,
+            ...positions.main,
             default: {
               top: scrollTop,
-              left: pinned ? scroll.positions.main.default.left : scrollLeft,
+              left: pinned ? positions.main.default.left : scrollLeft,
             },
           },
           pinned: {
             default: {
-              left: pinned ? scrollLeft : scroll.positions.pinned.default.left,
+              left: pinned ? scrollLeft : positions.pinned.default.left,
             },
           },
         })
       },
-      [scroll.positions, scrollX]
+      [positions, scrollX, pinned, update]
     )
 
     const handleScrollbarX = useCallback(
       (position: number) => {
         innerRef.current.handleScrollEvent({
           scrollLeft: position,
-          scrollTop: scroll.positions.main.default.top,
+          scrollTop: positions.main.default.top,
         })
       },
-      [innerRef, scroll.positions.main.default.top]
+      [innerRef, positions.main.default.top]
     )
 
     const handleScrollbarY = useCallback(
       (position: number) => {
         innerRef.current.handleScrollEvent({
-          scrollLeft: scroll.positions.main.default.left,
+          scrollLeft: positions.main.default.left,
           scrollTop: position,
         })
       },
-      [innerRef, scroll.positions.main.default.left]
+      [innerRef, positions.main.default.left]
     )
 
     return (
@@ -104,7 +104,7 @@ export const Main: React.FC<GridProps> = memo(
                   rowCount={data.rows.length}
                   rowHeight={config.rowHeight}
                   scrollLeft={scrollX}
-                  scrollTop={scroll.positions.main.default.top}
+                  scrollTop={positions.main.default.top}
                   tabIndex={-1}
                   width={width}
                 />
@@ -116,7 +116,7 @@ export const Main: React.FC<GridProps> = memo(
               corner
               gridRef={innerRef}
               pullUp={!pinned && view.pinnedRows.length === 0}
-              scrollTop={scroll.positions.main.default.top}
+              scrollTop={positions.main.default.top}
               updateScroll={handleScrollbarY}
             />
           )}

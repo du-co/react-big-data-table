@@ -9,8 +9,8 @@ import { GridProps } from '../../../../types'
 
 export const Header: React.FC<GridProps> = memo(
   ({ columns, innerRef, pinned, scrollX, calculateColumnWidth }) => {
-    const config = useConfig()
-    const scroll = useScroll()
+    const { headerCellRenderer, ...config } = useConfig()
+    const { positions, update } = useScroll()
     const keyPrefix = pinned ? 'pinned' : 'main'
 
     const cellRenderer: GridCellRenderer = useCallback(
@@ -24,8 +24,8 @@ export const Header: React.FC<GridProps> = memo(
             pinned={pinned}
             columnId={column.id}
           >
-            {config.headerCellRenderer
-              ? config.headerCellRenderer({
+            {headerCellRenderer
+              ? headerCellRenderer({
                   columnId: column.id,
                   pinnedColumn: pinned,
                   key: column.key,
@@ -34,29 +34,29 @@ export const Header: React.FC<GridProps> = memo(
           </HeaderCell>
         )
       },
-      [columns, config.headerCellRenderer]
+      [columns, headerCellRenderer, pinned, keyPrefix]
     )
 
     const onScroll = useCallback(
       ({ scrollLeft }: OnScrollParams) => {
         if (scrollLeft === scrollX) return
-        scroll.update({
-          ...scroll.positions,
+        update({
+          ...positions,
           main: {
-            ...scroll.positions.main,
+            ...positions.main,
             default: {
-              ...scroll.positions.main.default,
-              left: pinned ? scroll.positions.main.default.left : scrollLeft,
+              ...positions.main.default,
+              left: pinned ? positions.main.default.left : scrollLeft,
             },
           },
           pinned: {
             default: {
-              left: pinned ? scrollLeft : scroll.positions.pinned.default.left,
+              left: pinned ? scrollLeft : positions.pinned.default.left,
             },
           },
         })
       },
-      [scroll.positions, scrollX]
+      [positions, update, scrollX, pinned]
     )
 
     return (

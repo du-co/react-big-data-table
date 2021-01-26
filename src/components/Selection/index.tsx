@@ -51,41 +51,41 @@ const Spacer = styled.div`
 export const Selection = memo(() => {
   const config = useConfig()
   const view = useView()
-  const scroll = useScroll()
+  const { positions, update } = useScroll()
   const data = useData()
   const selection = useSelection()
 
   const onScrollPinned = useCallback(
     ({ scrollTop }: OnScrollParams) => {
-      if (scrollTop === scroll.positions.main.pinned.top) return
-      scroll.update({
-        ...scroll.positions,
+      if (scrollTop === positions.main.pinned.top) return
+      update({
+        ...positions,
         main: {
-          ...scroll.positions.main,
+          ...positions.main,
           pinned: {
             top: scrollTop,
           },
         },
       })
     },
-    [scroll.positions]
+    [positions, update]
   )
 
   const onScroll = useCallback(
     ({ scrollTop }: OnScrollParams) => {
-      if (scrollTop === scroll.positions.main.default.top) return
-      scroll.update({
-        ...scroll.positions,
+      if (scrollTop === positions.main.default.top) return
+      update({
+        ...positions,
         main: {
-          ...scroll.positions.main,
+          ...positions.main,
           default: {
-            left: scroll.positions.main.default.left,
+            left: positions.main.default.left,
             top: scrollTop,
           },
         },
       })
     },
-    [scroll.positions]
+    [positions, update]
   )
 
   const cellRendererPinned: GridCellRenderer = useCallback(
@@ -111,7 +111,7 @@ export const Selection = memo(() => {
         </Cell>
       )
     },
-    [view.pinnedRows, selection.selection]
+    [view.pinnedRows, selection]
   )
 
   const cellRenderer: GridCellRenderer = useCallback(
@@ -137,7 +137,7 @@ export const Selection = memo(() => {
         </Cell>
       )
     },
-    [data.rows, selection.selection]
+    [data.rows, selection]
   )
 
   return (
@@ -164,7 +164,7 @@ export const Selection = memo(() => {
                   cellRenderer={cellRendererPinned}
                   tabIndex={-1}
                   onScroll={onScrollPinned}
-                  scrollTop={scroll.positions.main.pinned.top}
+                  scrollTop={positions.main.pinned.top}
                 />
               )}
             </AutoSizer>
@@ -185,7 +185,7 @@ export const Selection = memo(() => {
               cellRenderer={cellRenderer}
               tabIndex={-1}
               onScroll={onScroll}
-              scrollTop={scroll.positions.main.default.top}
+              scrollTop={positions.main.default.top}
             />
           )}
         </AutoSizer>

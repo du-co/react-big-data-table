@@ -52,6 +52,7 @@ const BigDataTable: React.FC<BigDataTableProps> = memo(
     const { pinnedRows, pinRow } = usePinnedRows()
     const { initializeResize, columnSizes, resizeIndicator } = useColumnResize(wrapperRef)
     const defaultColumnOrder = data.columns.map((c) => c.id)
+    const { onSelectionChange, onSelectionAllChange, onViewChange } = config
     const {
       initializeReorder,
       reorderColumn,
@@ -73,27 +74,27 @@ const BigDataTable: React.FC<BigDataTableProps> = memo(
     const [scroll, updateScroll] = useState(DEFAULT_SCROLL_STATE)
 
     useEffect(() => {
-      if (config.onViewChange) {
-        config.onViewChange({
+      if (onViewChange) {
+        onViewChange({
           pinnedColumns,
           pinnedRows,
           columnOrder,
           columnSizes,
         })
       }
-    }, [pinnedColumns, pinnedRows, columnOrder, columnSizes])
+    }, [pinnedColumns, pinnedRows, columnOrder, columnSizes, onViewChange])
 
     useEffect(() => {
-      if (config.onSelectionChange) {
-        config.onSelectionChange(selection.selection)
+      if (onSelectionChange) {
+        onSelectionChange(selection.selection)
       }
-    }, [selection.selection])
+    }, [selection.selection, onSelectionChange])
 
     useEffect(() => {
-      if (config.onSelectionAllChange) {
-        config.onSelectionAllChange(selection.isAllSelected)
+      if (onSelectionAllChange) {
+        onSelectionAllChange(selection.isAllSelected)
       }
-    }, [selection.isAllSelected])
+    }, [selection.isAllSelected, onSelectionAllChange])
 
     return (
       <ConfigProvider
