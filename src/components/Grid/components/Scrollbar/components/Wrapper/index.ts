@@ -9,9 +9,7 @@ export const Wrapper = styled.div<Props>`
     horizontal ? (corner ? 'calc(100% - 13px)' : '100%') : '13px'};
   background: ${({ theme }) => theme.backgroundHeader};
   box-shadow: ${({ theme, horizontal }) =>
-    horizontal
-      ? `0 -1px 0 0 ${theme.borderColorHeader}`
-      : `-1px 0 0 0 ${theme.borderColorHeader}`};
+    horizontal ? `0 -1px 0 0 ${theme.borderColorHeader}` : `-1px 0 0 0 ${theme.borderColorHeader}`};
   z-index: 0;
 
   ${({ horizontal, corner, theme }) => {

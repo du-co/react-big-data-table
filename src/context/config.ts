@@ -1,9 +1,5 @@
 import { createContext, useContext } from 'react'
-import {
-  DEFAULT_ACTION,
-  DEFAULT_COLUMN_WIDTH,
-  DEFAULT_ROW_HEIGHT,
-} from '../consts'
+import { DEFAULT_ACTION, DEFAULT_COLUMN_WIDTH, DEFAULT_ROW_HEIGHT } from '../consts'
 import { BigDataTableProps } from '../types'
 
 interface ConfigContextProps extends Omit<BigDataTableProps, 'data'> {

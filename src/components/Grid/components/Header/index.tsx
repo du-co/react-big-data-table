@@ -1,6 +1,9 @@
 import React, { memo, useCallback } from 'react'
 import { AutoSizer, Grid, GridCellRenderer, OnScrollParams } from 'react-virtualized'
-import { HeaderRow, Row, HeaderCell, Spacer } from '../'
+import { HeaderRow } from '../HeaderRow'
+import { Row } from '../Row'
+import { HeaderCell } from '../HeaderCell'
+import { Spacer } from '../Spacer'
 import { useConfig, useScroll } from '../../../../context'
 import { GridProps } from '../../../../types'
 

@@ -2,9 +2,7 @@ import { createContext, useContext } from 'react'
 import { DEFAULT_CURRY } from '../consts'
 
 interface MenuContextProps {
-  onContextMenu: (
-    _children: React.ReactElement[]
-  ) => (e: React.MouseEvent) => void
+  onContextMenu: (_children: React.ReactElement[]) => (e: React.MouseEvent) => void
   triggerMenuAction: (_action: any) => () => void
   menuState: {
     visible?: boolean

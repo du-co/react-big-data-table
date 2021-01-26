@@ -3,9 +3,7 @@ import { ID } from '../types'
 import utils from '../utils'
 
 export const usePinnedColumns = (defaultPinnedColumns: ID[] = []) => {
-  const [pinnedColumns, updatePinnedColumns] = useState<ID[]>(
-    defaultPinnedColumns
-  )
+  const [pinnedColumns, updatePinnedColumns] = useState<ID[]>(defaultPinnedColumns)
   const pinColumn = (column: ID, pin: boolean) => () =>
     pin
       ? updatePinnedColumns([...pinnedColumns, column])
