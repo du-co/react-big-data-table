@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react'
+import React, { memo, ReactElement, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useMenu } from '../../context'
 
@@ -38,11 +38,7 @@ const Wrapper = styled.ul`
   list-style: none;
 `
 
-export const ContextMenu: React.FC<ContextMenuProps> = ({
-  children,
-  menuState,
-  innerRef,
-}) => {
+export const ContextMenu: React.FC<ContextMenuProps> = memo(({ children, menuState, innerRef }) => {
   const [selected, updateSelected] = useState(0)
   const menu = useMenu()
 
@@ -85,4 +81,4 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
       </Wrapper>
     </Menu>
   ) : null
-}
+})

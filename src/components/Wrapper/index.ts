@@ -31,7 +31,6 @@ export const Wrapper = styled.div`
     box-sizing: border-box;
     pointer-events: none;
     z-index: 1;
-    border: ${({ theme }) =>
-      `${theme.borderWidth}px solid ${theme.borderColorHeader}`};
+    border: ${({ theme }) => `${theme.borderWidth}px solid ${theme.borderColorHeader}`};
   }
 `

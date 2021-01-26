@@ -1,26 +1,14 @@
-import React from 'react'
-import {
-  AutoSizer,
-  Grid,
-  GridCellRenderer,
-  OnScrollParams,
-} from 'react-virtualized'
+import React, { memo, useCallback } from 'react'
+import { AutoSizer, Grid, GridCellRenderer, OnScrollParams } from 'react-virtualized'
 import styled from 'styled-components'
-import {
-  useConfig,
-  useData,
-  useView,
-  useScroll,
-  useSelection,
-} from '../../context'
+import { useConfig, useData, useView, useScroll, useSelection } from '../../context'
 import { Cell, PinnedRow, Row } from '../Grid/components'
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 30px;
-  border-right: ${({ theme }) =>
-    `${theme.borderWidthPinned}px solid ${theme.borderColorPinned}`};
+  border-right: ${({ theme }) => `${theme.borderWidthPinned}px solid ${theme.borderColorPinned}`};
   z-index: 1;
 
   .ReactVirtualized__Grid {
@@ -50,8 +38,7 @@ const SelectAll = styled(Placer)<{ rowHeight: number }>`
   background: ${({ theme }) => theme.backgroundHeader};
   height: ${({ rowHeight }) => rowHeight}px;
   box-sizing: border-box;
-  border-bottom: ${({ theme }) =>
-    `${theme.borderWidth}px solid ${theme.borderColorHeader}`};
+  border-bottom: ${({ theme }) => `${theme.borderWidth}px solid ${theme.borderColorHeader}`};
 `
 
 const Spacer = styled.div`
@@ -61,65 +48,97 @@ const Spacer = styled.div`
   z-index: 0;
 `
 
-export const Selection = () => {
+export const Selection = memo(() => {
   const config = useConfig()
   const view = useView()
   const scroll = useScroll()
   const data = useData()
   const selection = useSelection()
 
-  const onScrollPinned = ({ scrollTop }: OnScrollParams) => {
-    if (scrollTop === scroll.positions.main.pinned.top) return
-    scroll.update({
-      ...scroll.positions,
-      main: {
-        ...scroll.positions.main,
-        pinned: {
-          top: scrollTop,
+  const onScrollPinned = useCallback(
+    ({ scrollTop }: OnScrollParams) => {
+      if (scrollTop === scroll.positions.main.pinned.top) return
+      scroll.update({
+        ...scroll.positions,
+        main: {
+          ...scroll.positions.main,
+          pinned: {
+            top: scrollTop,
+          },
         },
-      },
-    })
-  }
+      })
+    },
+    [scroll.positions]
+  )
 
-  const onScroll = ({ scrollTop }: OnScrollParams) => {
-    if (scrollTop === scroll.positions.main.default.top) return
-    scroll.update({
-      ...scroll.positions,
-      main: {
-        ...scroll.positions.main,
-        default: {
-          left: scroll.positions.main.default.left,
-          top: scrollTop,
+  const onScroll = useCallback(
+    ({ scrollTop }: OnScrollParams) => {
+      if (scrollTop === scroll.positions.main.default.top) return
+      scroll.update({
+        ...scroll.positions,
+        main: {
+          ...scroll.positions.main,
+          default: {
+            left: scroll.positions.main.default.left,
+            top: scrollTop,
+          },
         },
-      },
-    })
-  }
+      })
+    },
+    [scroll.positions]
+  )
 
-  const cellRenderer = (pinned: boolean): GridCellRenderer => ({
-    style,
-    rowIndex,
-  }) => {
-    const id = pinned ? view.pinnedRows[rowIndex] : data.rows[rowIndex].id
-    return (
-      <Cell
-        rowIndex={rowIndex}
-        style={style}
-        key={`${pinned && 'pinned'}-selection-${rowIndex}`}
-        rowId={id}
-        pinnedRow={pinned}
-        columnId={-1}
-        columnIndex={-1}
-      >
-        <Placer>
-          <input
-            type="checkbox"
-            checked={selection.isItemSelected(id) || selection.isAllSelected}
-            onChange={() => selection.toggleItemSelection(id)}
-          />
-        </Placer>
-      </Cell>
-    )
-  }
+  const cellRendererPinned: GridCellRenderer = useCallback(
+    ({ style, rowIndex }) => {
+      const id = view.pinnedRows[rowIndex]
+      return (
+        <Cell
+          rowIndex={rowIndex}
+          style={style}
+          key={`pinned-selection-${rowIndex}`}
+          rowId={id}
+          pinnedRow={true}
+          columnId={-1}
+          columnIndex={-1}
+        >
+          <Placer>
+            <input
+              type="checkbox"
+              checked={selection.isItemSelected(id) || selection.isAllSelected}
+              onChange={() => selection.toggleItemSelection(id)}
+            />
+          </Placer>
+        </Cell>
+      )
+    },
+    [view.pinnedRows, selection.selection]
+  )
+
+  const cellRenderer: GridCellRenderer = useCallback(
+    ({ style, rowIndex }) => {
+      const id = data.rows[rowIndex].id
+      return (
+        <Cell
+          rowIndex={rowIndex}
+          style={style}
+          key={`selection-${rowIndex}`}
+          rowId={id}
+          pinnedRow={false}
+          columnId={-1}
+          columnIndex={-1}
+        >
+          <Placer>
+            <input
+              type="checkbox"
+              checked={selection.isItemSelected(id) || selection.isAllSelected}
+              onChange={() => selection.toggleItemSelection(id)}
+            />
+          </Placer>
+        </Cell>
+      )
+    },
+    [data.rows, selection.selection]
+  )
 
   return (
     <Wrapper>
@@ -131,9 +150,7 @@ export const Selection = () => {
         />
       </SelectAll>
       {!config.disablePinnedRows && view.pinnedRows.length > 0 && (
-        <PinnedRow
-          style={{ height: view.pinnedRows.length * config.rowHeight }}
-        >
+        <PinnedRow style={{ height: view.pinnedRows.length * config.rowHeight }}>
           <Row>
             <AutoSizer disableWidth>
               {({ height }) => (
@@ -144,7 +161,7 @@ export const Selection = () => {
                   columnWidth={30}
                   columnCount={1}
                   rowCount={view.pinnedRows.length}
-                  cellRenderer={cellRenderer(true)}
+                  cellRenderer={cellRendererPinned}
                   tabIndex={-1}
                   onScroll={onScrollPinned}
                   scrollTop={scroll.positions.main.pinned.top}
@@ -165,7 +182,7 @@ export const Selection = () => {
               columnWidth={30}
               columnCount={1}
               rowCount={data.rows.length}
-              cellRenderer={cellRenderer(false)}
+              cellRenderer={cellRenderer}
               tabIndex={-1}
               onScroll={onScroll}
               scrollTop={scroll.positions.main.default.top}
@@ -176,4 +193,4 @@ export const Selection = () => {
       <Spacer />
     </Wrapper>
   )
-}
+})

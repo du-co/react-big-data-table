@@ -1,8 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import {
-  MIN_SCROLLBAR_HANDLE_SIZE,
-  SCROLLBAR_HANDLE_SIZE,
-} from '../../../../../consts'
+import { MIN_SCROLLBAR_HANDLE_SIZE, SCROLLBAR_HANDLE_SIZE } from '../../../../../consts'
 
 interface Props {
   gridRef: any

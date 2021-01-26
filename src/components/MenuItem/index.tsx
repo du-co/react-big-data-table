@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import styled from 'styled-components'
 import { useMenu } from '../../context'
 
@@ -48,24 +48,14 @@ const Shortcut = styled.span`
   font-style: italic;
 `
 
-export const MenuItem: React.FC<Props> = ({
-  onClick,
-  text,
-  shortcut,
-  selected,
-  divider,
-}) => {
+export const MenuItem: React.FC<Props> = memo(({ onClick, text, shortcut, selected, divider }) => {
   const menu = useMenu()
   return (
-    <Button
-      onClick={menu.triggerMenuAction(onClick)}
-      selected={selected}
-      divider={divider}
-    >
+    <Button onClick={menu.triggerMenuAction(onClick)} selected={selected} divider={divider}>
       <Inner>
         {text}
         {shortcut && <Shortcut>{shortcut}</Shortcut>}
       </Inner>
     </Button>
   )
-}
+})

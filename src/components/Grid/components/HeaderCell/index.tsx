@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import styled from 'styled-components'
 import { useConfig, useHovers, useMenu, useView } from '../../../../context'
 import { ID } from '../../../../types'
@@ -11,8 +11,7 @@ interface WrapperProps {
 const Wrapper = styled.div<WrapperProps>`
   display: flex;
   box-sizing: border-box;
-  border: ${({ theme }) =>
-    `${theme.borderWidth}px solid ${theme.borderColorHeader}`};
+  border: ${({ theme }) => `${theme.borderWidth}px solid ${theme.borderColorHeader}`};
   border-right: none;
   background: ${({ theme, hovered }) =>
     hovered ? theme.backgroundHeaderHover : theme.backgroundHeader};
@@ -72,13 +71,7 @@ interface Props {
   pinned?: boolean
 }
 
-export const HeaderCell: React.FC<Props> = ({
-  index,
-  children,
-  style,
-  columnId,
-  pinned,
-}) => {
+export const HeaderCell: React.FC<Props> = memo(({ index, children, style, columnId, pinned }) => {
   const menu = useMenu()
   const view = useView()
   const hovered = useHovers()
@@ -99,9 +92,7 @@ export const HeaderCell: React.FC<Props> = ({
   return (
     <Wrapper
       style={style}
-      onContextMenu={
-        menuItems.length === 0 ? undefined : menu.onContextMenu(menuItems)
-      }
+      onContextMenu={menuItems.length === 0 ? undefined : menu.onContextMenu(menuItems)}
       hovered={hovered.column === columnId}
       onDragOver={view.reorder.reorder(index, pinned)}
     >
@@ -115,4 +106,4 @@ export const HeaderCell: React.FC<Props> = ({
       <ResizeHandle onMouseDown={view.resize(columnId)} />
     </Wrapper>
   )
-}
+})

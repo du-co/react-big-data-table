@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { Index } from 'react-virtualized'
 import { useConfig, useData, useScroll, useView } from '../../context'
 import { Column, Row, Header, Pinned, Main } from './components'
@@ -7,7 +7,7 @@ interface Props {
   pinned?: boolean
 }
 
-export const Grid: React.FC<Props> = ({ pinned }) => {
+export const Grid: React.FC<Props> = memo(({ pinned }) => {
   const view = useView()
   const data = useData()
   const config = useConfig()
@@ -31,10 +31,13 @@ export const Grid: React.FC<Props> = ({ pinned }) => {
     [view.pinnedColumns, view.columnSizes, config.defaultColumnWidth, pinned]
   )
 
-  const calculateColumnWidth = ({ index }: Index) => {
-    const column = columns[index].id
-    return view.columnSizes[column] ?? config.defaultColumnWidth
-  }
+  const calculateColumnWidth = useCallback(
+    ({ index }: Index) => {
+      const column = columns[index].id
+      return view.columnSizes[column] ?? config.defaultColumnWidth
+    },
+    [columns, view.columnSizes, config.defaultColumnWidth]
+  )
 
   useEffect(() => {
     headerGrid.current?.recomputeGridSize()
@@ -74,4 +77,4 @@ export const Grid: React.FC<Props> = ({ pinned }) => {
       </Column>
     </Row>
   )
-}
+})

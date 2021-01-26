@@ -59,8 +59,7 @@ export const useColumnResize = (wrapperRef: any, initialSizes = {}) => {
     const width = resizer.current.width + resizer.current.diff
     updateColumnSizes({
       ...columnSizes,
-      [resizer.current.columnId]:
-        width >= MIN_COLUMN_WIDTH ? width : MIN_COLUMN_WIDTH,
+      [resizer.current.columnId]: width >= MIN_COLUMN_WIDTH ? width : MIN_COLUMN_WIDTH,
     })
     terminateResize()
   }
