@@ -18,7 +18,7 @@ npm install react-big-data-table
 
 ```jsx
 import React, { useEffect } from 'react'
-import BigDataTable, {MenuItem} from 'react-big-data-table'
+import BigDataTable, { MenuItem } from 'react-big-data-table'
 
 const MyComponent = () => {
   const [tableData, setTableData] = useState(null)
@@ -29,11 +29,16 @@ const MyComponent = () => {
       .then((data) => setTableData(data))
   }, [])
 
-  const renderContextMenu = ({rowId, ColumnId, pinnedRow, pinnedColumn}) => ([
-    <MenuItem onClick={() => console.log(`You clicked: column ${columnId}, row ${rowId}.`)}>
-  ])
+  const renderContextMenu = ({ rowId, columnId, pinnedRow, pinnedColumn }) => [
+    <MenuItem
+      onClick={() => console.log(`You clicked: column ${columnId}, row ${rowId}.`)}
+      text="Click me"
+    />,
+  ]
 
-  return tableData ? <BigDataTable data={tableData} contextMenuRenderer={renderContextMenu}/> : null
+  return tableData ? (
+    <BigDataTable data={tableData} contextMenuRenderer={renderContextMenu} />
+  ) : null
 }
 ```
 
