@@ -82,6 +82,9 @@ const BigDataTable: React.FC<BigDataTableProps> = memo(
           columnSizes,
         })
       }
+      if (hovered.row !== null || hovered.row !== null) {
+        setHovered({ row: null, column: null })
+      }
     }, [pinnedColumns, pinnedRows, columnOrder, columnSizes, onViewChange])
 
     useEffect(() => {
