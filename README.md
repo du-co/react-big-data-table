@@ -121,6 +121,8 @@ const MyComponent = () => {
 | disableSelection     | `false` |          | Disables ability to select rows                                                                          |
 | disablePinnedColumns | `false` |          | Disables the ability to pin columns                                                                      |
 | disablePinnedRows    | `false` |          | Disables the ability to pin rows                                                                         |
+| disableReorder       | `false` |          | Disables column reordering                                                                               |
+| disableResize        | `false` |          | Disables column resizing                                                                                 |
 | onSelectionChange    |         |          | Function to be called when a selection change is made, takes array of Ids as an argument                 |
 | onSelectionAllChange |         |          | Function to be called when the user selects / deselects all, takes a boolean as an argument              |
 | onViewChange         |         |          | Function to be called when the table view changes, takes the current view config as an argument          |
