@@ -13,9 +13,7 @@ interface WrapperProps {
 
 const Wrapper = styled.div<WrapperProps>`
   box-sizing: border-box;
-  border: ${({ theme }) => `${theme.borderWidth}px solid ${theme.borderColor}`};
-  border-right: none;
-  border-bottom: none;
+  border-top: ${({ theme }) => `${theme.borderWidth}px solid ${theme.borderColor}`};
   background: ${({ theme, hovered }) => (hovered ? theme.backgroundMenuItem : 'transparent')};
 
   .resizing & {

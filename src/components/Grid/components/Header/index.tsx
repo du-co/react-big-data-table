@@ -4,13 +4,15 @@ import { HeaderRow } from '../HeaderRow'
 import { Row } from '../Row'
 import { HeaderCell } from '../HeaderCell'
 import { Spacer } from '../Spacer'
-import { useConfig, useScroll } from '../../../../context'
+import { useConfig, useHovers, useMenu, useScroll } from '../../../../context'
 import { GridProps } from '../../../../types'
 
 export const Header: React.FC<GridProps> = memo(
   ({ columns, innerRef, pinned, scrollX, calculateColumnWidth }) => {
     const { headerCellRenderer, ...config } = useConfig()
     const { positions, update } = useScroll()
+    const { menuState } = useMenu()
+    const hovers = useHovers()
     const keyPrefix = pinned ? 'pinned' : 'main'
 
     const cellRenderer: GridCellRenderer = useCallback(
@@ -60,7 +62,13 @@ export const Header: React.FC<GridProps> = memo(
     )
 
     return (
-      <HeaderRow rowHeight={config.rowHeight}>
+      <HeaderRow
+        rowHeight={config.rowHeight}
+        onMouseEnter={useCallback(
+          () => (menuState.visible ? null : hovers.update({ row: null, column: null })),
+          [menuState.visible]
+        )}
+      >
         <Row>
           <AutoSizer disableHeight>
             {({ width }) => (

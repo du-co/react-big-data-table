@@ -13,6 +13,7 @@ const Wrapper = styled.div<WrapperProps>`
   box-sizing: border-box;
   border: ${({ theme }) => `${theme.borderWidth}px solid ${theme.borderColorHeader}`};
   border-right: none;
+  border-left: none;
   background: ${({ theme, hovered }) =>
     hovered ? theme.backgroundHeaderHover : theme.backgroundHeader};
   &:first-child {
