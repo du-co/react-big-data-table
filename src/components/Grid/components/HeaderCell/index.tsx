@@ -97,14 +97,16 @@ export const HeaderCell: React.FC<Props> = memo(({ index, children, style, colum
       hovered={hovered.column === columnId}
       onDragOver={view.reorder.reorder(index, pinned)}
     >
-      <GrabHandle
-        onDragStart={view.reorder.initialize(index, pinned)}
-        onDragEnd={view.reorder.confirm}
-        onDrag={view.reorder.drag}
-        draggable
-      />
+      {!config.disableReorder && (
+        <GrabHandle
+          onDragStart={view.reorder.initialize(index, pinned)}
+          onDragEnd={view.reorder.confirm}
+          onDrag={view.reorder.drag}
+          draggable
+        />
+      )}
       <Container>{children}</Container>
-      <ResizeHandle onMouseDown={view.resize(columnId)} />
+      {!config.disableResize && <ResizeHandle onMouseDown={view.resize(columnId)} />}
     </Wrapper>
   )
 })

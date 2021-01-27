@@ -1,19 +1,19 @@
 import React from 'react'
 import { Meta, Story } from '@storybook/react'
-import BigDataTable, { BigDataTableProps } from '../src'
+import BigDataTable, { BigDataTableProps, MenuItem } from '../src'
 
 const rowData = (rowId: number) =>
-  Array.from(Array(100)).map((_, i) => ({
+  Array.from(Array(500)).map((_, i) => ({
     columnId: i,
     data: `Row ${rowId}, Column ${i}`,
   }))
 
 const data = {
-  columns: Array.from(Array(100)).map((_, i) => ({
+  columns: Array.from(Array(500)).map((_, i) => ({
     id: i,
     key: `Column ${i}`,
   })),
-  rows: Array.from(Array(1000)).map((_, i) => ({
+  rows: Array.from(Array(5000)).map((_, i) => ({
     id: i,
     columns: rowData(i),
   })),
@@ -37,7 +37,28 @@ const Template: Story<BigDataTableProps> = () => (
       position: 'relative',
     }}
   >
-    <BigDataTable data={data} />
+    <BigDataTable
+      data={data}
+      onViewChange={(view) => console.log('Current view: ', view)}
+      onSelectionAllChange={(isSelected) => console.log('All selected: ', isSelected)}
+      onSelectionChange={(selection) => console.log('Selection: ', selection)}
+      disablePinnedColumns
+      disablePinnedRows
+      disableSelection
+      disableReorder
+      disableResize
+      cellRenderer={(cell) => cell.data}
+      headerCellRenderer={(cell) => cell.key}
+      contextMenuRenderer={(cell) => [
+        <MenuItem
+          text="I'm a menu item"
+          onClick={() => console.log(`You clicked: column ${cell.columnId}, row ${cell.rowId}`)}
+          key="menu"
+        />,
+      ]}
+      rowHeight={30}
+      defaultColumnWidth={150}
+    />
   </div>
 )
 

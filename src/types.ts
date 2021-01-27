@@ -1,4 +1,4 @@
-import { DragEvent, ReactElement } from 'react'
+import { DragEvent } from 'react'
 import { Index } from 'react-virtualized'
 
 export type ID = number
@@ -77,13 +77,15 @@ export interface HeaderCellRendererProps
 }
 
 export type ContextMenuRenderer = (_: ContextMenuRendererProps) => JSX.Element[]
-export type CellRenderer = (_: CellRendererProps) => ReactElement
-export type HeaderCellRenderer = (_: HeaderCellRendererProps) => ReactElement
+export type CellRenderer = (_: CellRendererProps) => any
+export type HeaderCellRenderer = (_: HeaderCellRendererProps) => any
 
 export interface BigDataTableProps {
   disableSelection?: boolean
   disablePinnedColumns?: boolean
   disablePinnedRows?: boolean
+  disableReorder?: boolean
+  disableResize?: boolean
   onSelectionChange?: (selection: ID[]) => void
   onSelectionAllChange?: (selected: boolean) => void
   onViewChange?: (view: BigDataTableCurrentView) => void

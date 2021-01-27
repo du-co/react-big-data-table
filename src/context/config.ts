@@ -8,9 +8,6 @@ interface ConfigContextProps extends Omit<BigDataTableProps, 'data'> {
 }
 
 const context = createContext<ConfigContextProps>({
-  disableSelection: false,
-  disablePinnedColumns: false,
-  disablePinnedRows: false,
   onSelectionChange: DEFAULT_ACTION,
   onSelectionAllChange: DEFAULT_ACTION,
   defaultColumnWidth: DEFAULT_COLUMN_WIDTH,
