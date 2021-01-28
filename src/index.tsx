@@ -38,6 +38,7 @@ const BigDataTable: React.FC<BigDataTableProps> = memo(
     theme,
     defaultColumnWidth = DEFAULT_COLUMN_WIDTH,
     rowHeight = DEFAULT_ROW_HEIGHT,
+    defaultView,
     ...config
   }) => {
     const { menuChildren, menuState, menuRef, onContextMenu, triggerMenuAction } = useContextMenu()
@@ -48,10 +49,16 @@ const BigDataTable: React.FC<BigDataTableProps> = memo(
 
     const wrapperRef = useRef<HTMLDivElement>((null as unknown) as HTMLDivElement)
     const selection = useSelection()
-    const { pinnedColumns, pinColumn, updatePinnedColumns } = usePinnedColumns()
-    const { pinnedRows, pinRow } = usePinnedRows()
-    const { initializeResize, columnSizes, resizeIndicator } = useColumnResize(wrapperRef)
-    const defaultColumnOrder = data.columns.map((c) => c.id)
+    const { pinnedColumns, pinColumn, updatePinnedColumns } = usePinnedColumns(
+      defaultView?.pinnedColumns
+    )
+    const { pinnedRows, pinRow } = usePinnedRows(defaultView?.pinnedRows)
+    const { initializeResize, columnSizes, resizeIndicator } = useColumnResize(
+      wrapperRef,
+      defaultView?.columnSizes
+    )
+    const defaultColumnOrder =
+      defaultView?.columnOrder ?? useMemo(() => data.columns.map((c) => c.id), [data.columns])
     const { onSelectionChange, onSelectionAllChange, onViewChange } = config
     const {
       initializeReorder,
