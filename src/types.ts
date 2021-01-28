@@ -35,6 +35,15 @@ export interface BigDataTableCurrentView {
   }
 }
 
+export interface BigDataTableDefaultView {
+  pinnedColumns?: ID[]
+  pinnedRows?: ID[]
+  columnOrder?: ID[]
+  columnSizes?: {
+    [key in ID]: number
+  }
+}
+
 export interface BigDataTableView extends BigDataTableCurrentView {
   pin: {
     column: PinAction
@@ -103,6 +112,7 @@ export interface BigDataTableProps {
     }
   }
   fetchNextPage?: () => void
+  defaultView?: BigDataTableDefaultView
 }
 
 export interface ScrollState {
