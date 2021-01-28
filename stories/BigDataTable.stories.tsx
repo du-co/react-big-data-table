@@ -42,11 +42,6 @@ const Template: Story<BigDataTableProps> = () => (
       onViewChange={(view) => console.log('Current view: ', view)}
       onSelectionAllChange={(isSelected) => console.log('All selected: ', isSelected)}
       onSelectionChange={(selection) => console.log('Selection: ', selection)}
-      disablePinnedColumns
-      disablePinnedRows
-      disableSelection
-      disableReorder
-      disableResize
       cellRenderer={(cell) => cell.data}
       headerCellRenderer={(cell) => cell.key}
       contextMenuRenderer={(cell) => [
@@ -58,6 +53,14 @@ const Template: Story<BigDataTableProps> = () => (
       ]}
       rowHeight={30}
       defaultColumnWidth={150}
+      defaultView={{
+        pinnedRows: [0, 1, 2],
+        pinnedColumns: [3, 4, 5],
+        columnOrder: data.columns.map((c) => c.id).sort(() => Math.random() - 0.5),
+        columnSizes: {
+          4: 300,
+        },
+      }}
     />
   </div>
 )
