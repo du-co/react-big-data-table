@@ -12,6 +12,7 @@ export const Wrapper = styled.div`
   font-size: ${({ theme }) => theme.fontSize}px;
   line-height: ${({ theme }) => theme.fontSize / 10};
   user-select: none;
+  outline: none;
 
   &.resizing {
     cursor: e-resize !important;
@@ -19,6 +20,10 @@ export const Wrapper = styled.div`
 
   &.reordering {
     cursor: grabbing;
+  }
+
+  &.kill-events {
+    pointer-events: none;
   }
 
   &:after {
@@ -32,5 +37,12 @@ export const Wrapper = styled.div`
     pointer-events: none;
     z-index: 1;
     border: ${({ theme }) => `${theme.borderWidth}px solid ${theme.borderColorHeader}`};
+  }
+
+  &.active {
+    box-shadow: 0 0 3px ${({ theme }) => theme.primaryColor};
+    &:after {
+      border-color: ${({ theme }) => theme.primaryColor};
+    }
   }
 `

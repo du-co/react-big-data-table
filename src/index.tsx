@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { ThemeProvider } from 'styled-components'
 import {
   Wrapper,
@@ -17,8 +17,9 @@ import {
   useColumnReorder,
   useSelection,
   useContextMenu,
+  useHovers,
 } from './hooks'
-import { BigDataTableProps, HoverState } from './types'
+import { BigDataTableProps } from './types'
 import defaultTheme from './theme'
 import { DEFAULT_SCROLL_STATE, DEFAULT_COLUMN_WIDTH, DEFAULT_ROW_HEIGHT } from './consts'
 
@@ -41,13 +42,10 @@ const BigDataTable: React.FC<BigDataTableProps> = memo(
     defaultView,
     ...config
   }) => {
-    const { menuChildren, menuState, menuRef, onContextMenu, triggerMenuAction } = useContextMenu()
-    const [hovered, setHovered] = useState<HoverState>({
-      row: null,
-      column: null,
-    })
-
     const wrapperRef = useRef<HTMLDivElement>((null as unknown) as HTMLDivElement)
+    const { menuChildren, menuState, menuRef, onContextMenu, triggerMenuAction } = useContextMenu(
+      wrapperRef
+    )
     const selection = useSelection()
     const { pinnedColumns, pinColumn, updatePinnedColumns } = usePinnedColumns(
       defaultView?.pinnedColumns
@@ -78,6 +76,14 @@ const BigDataTable: React.FC<BigDataTableProps> = memo(
       columnOrder,
     })
 
+    const { hovered, updateHovered, handleStep } = useHovers(
+      pinnedRows,
+      pinnedColumns,
+      columnOrder,
+      transformedData.rows,
+      wrapperRef
+    )
+
     const [scroll, updateScroll] = useState(DEFAULT_SCROLL_STATE)
 
     useEffect(() => {
@@ -88,9 +94,6 @@ const BigDataTable: React.FC<BigDataTableProps> = memo(
           columnOrder,
           columnSizes,
         })
-      }
-      if (hovered.row !== null || hovered.row !== null) {
-        setHovered({ row: null, column: null })
       }
     }, [pinnedColumns, pinnedRows, columnOrder, columnSizes, onViewChange])
 
@@ -105,6 +108,12 @@ const BigDataTable: React.FC<BigDataTableProps> = memo(
         onSelectionAllChange(selection.isAllSelected)
       }
     }, [selection.isAllSelected, onSelectionAllChange])
+
+    useEffect(() => {
+      if (wrapperRef.current) {
+        wrapperRef.current.focus()
+      }
+    }, [wrapperRef])
 
     return (
       <ConfigProvider
@@ -125,7 +134,7 @@ const BigDataTable: React.FC<BigDataTableProps> = memo(
             <HoverProvider
               value={{
                 ...hovered,
-                update: setHovered,
+                update: updateHovered,
               }}
             >
               <ScrollProvider
@@ -166,11 +175,10 @@ const BigDataTable: React.FC<BigDataTableProps> = memo(
                     >
                       <Wrapper
                         ref={wrapperRef}
-                        onMouseLeave={useCallback(
-                          () =>
-                            menuState.visible ? null : setHovered({ row: null, column: null }),
-                          [menuState.visible]
-                        )}
+                        tabIndex={0}
+                        onKeyDown={handleStep}
+                        onFocus={() => wrapperRef.current.classList.add('active')}
+                        onBlur={() => wrapperRef.current.classList.remove('active')}
                       >
                         {!config.disableSelection && <Selection />}
                         {!config.disablePinnedColumns && pinnedColumns.length > 0 && (

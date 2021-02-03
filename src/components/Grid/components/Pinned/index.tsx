@@ -4,7 +4,7 @@ import { PinnedRow } from '../PinnedRow'
 import { Row } from '../Row'
 import { Cell } from '../Cell'
 import { Scrollbar } from '../Scrollbar'
-import { useConfig, useData, useScroll, useView } from '../../../../context'
+import { useConfig, useData, useScroll, useView, useHovers } from '../../../../context'
 import { GridProps } from '../../../../types'
 import utils from '../../../../utils'
 
@@ -14,6 +14,7 @@ export const Pinned: React.FC<GridProps> = memo(
     const { cellRenderer: cellRendererProp, ...config } = useConfig()
     const data = useData()
     const { positions, update } = useScroll()
+    const { key: keyboardNavOccured, cell: highlightedCell } = useHovers()
     const keyPrefix = pinned ? 'pinned' : 'main'
 
     const cellRenderer: GridCellRenderer = useCallback(
@@ -97,6 +98,11 @@ export const Pinned: React.FC<GridProps> = memo(
                 rowHeight={config.rowHeight}
                 scrollLeft={scrollX}
                 scrollTop={positions.main.pinned.top}
+                scrollToRow={
+                  !pinned && keyboardNavOccured && highlightedCell.pinnedRow
+                    ? highlightedCell.row!
+                    : undefined
+                }
                 tabIndex={-1}
                 width={width}
               />

@@ -3,7 +3,7 @@ import { AutoSizer, Grid, GridCellRenderer, OnScrollParams } from 'react-virtual
 import { Row } from '../Row'
 import { Cell } from '../Cell'
 import { Scrollbar } from '../Scrollbar'
-import { useConfig, useData, useScroll, useView } from '../../../../context'
+import { useConfig, useData, useScroll, useView, useHovers } from '../../../../context'
 import { GridProps } from '../../../../types'
 import utils from '../../../../utils'
 
@@ -14,6 +14,7 @@ export const Main: React.FC<GridProps> = memo(
     const { positions, update } = useScroll()
     const view = useView()
     const keyPrefix = pinned ? 'pinned' : 'main'
+    const { key: keyboardNavOccured, cell: highlightedCell } = useHovers()
 
     const cellRenderer: GridCellRenderer = useCallback(
       ({ style, columnIndex, rowIndex }) => {
@@ -88,6 +89,15 @@ export const Main: React.FC<GridProps> = memo(
       [innerRef, positions.main.default.left]
     )
 
+    let scrollToColumn: number | undefined
+
+    if (
+      keyboardNavOccured &&
+      ((!pinned && !highlightedCell.pinnedColumn) || (pinned && highlightedCell.pinnedColumn))
+    ) {
+      scrollToColumn = highlightedCell.column!
+    }
+
     return (
       <>
         <Row flexed>
@@ -105,6 +115,12 @@ export const Main: React.FC<GridProps> = memo(
                   rowHeight={config.rowHeight}
                   scrollLeft={scrollX}
                   scrollTop={positions.main.default.top}
+                  scrollToRow={
+                    !pinned && keyboardNavOccured && !highlightedCell.pinnedRow
+                      ? highlightedCell.row!
+                      : undefined
+                  }
+                  scrollToColumn={scrollToColumn}
                   tabIndex={-1}
                   width={width}
                 />

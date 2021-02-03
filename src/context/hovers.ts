@@ -5,13 +5,27 @@ import { HoverState, ID } from '../types'
 interface HoverContextProps {
   row: ID | null
   column: ID | null
-  update: (_: HoverState) => void
+  key: boolean
+  cell: {
+    row: number | null
+    column: number | null
+    pinnedColumn: boolean
+    pinnedRow: boolean
+  }
+  update: (state: HoverState, pinnedRow?: boolean, pinnedColumn?: boolean) => void
 }
 
 const context = createContext<HoverContextProps>({
   row: null,
   column: null,
+  key: false,
   update: DEFAULT_ACTION,
+  cell: {
+    row: null,
+    column: null,
+    pinnedColumn: false,
+    pinnedRow: false,
+  },
 })
 
 export const { Provider: HoverProvider } = context

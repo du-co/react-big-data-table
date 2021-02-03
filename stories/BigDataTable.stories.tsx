@@ -54,8 +54,8 @@ const Template: Story<BigDataTableProps> = () => (
       rowHeight={30}
       defaultColumnWidth={150}
       defaultView={{
-        pinnedRows: [0, 1, 2],
-        pinnedColumns: [3, 4, 5],
+        pinnedRows: [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 50, 51, 52, 56, 57, 58, 59, 60],
+        pinnedColumns: [3, 4, 5, 8, 6, 20, 43, 25, 60, 45, 50, 51, 52, 53, 71, 72, 74, 75],
         columnOrder: data.columns.map((c) => c.id).sort(() => Math.random() - 0.5),
         columnSizes: {
           4: 300,
