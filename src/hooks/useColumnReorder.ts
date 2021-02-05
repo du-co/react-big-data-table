@@ -106,7 +106,7 @@ export const useColumnReorder = (
 
   return {
     initializeReorder,
-    columnOrder,
+    columnOrder: filteredOrder,
     reorderColumn,
     confirmReorder,
     reorderIndicator,

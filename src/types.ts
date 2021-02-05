@@ -143,6 +143,7 @@ export interface GridProps {
 export interface HoverState {
   row: ID | null
   column: ID | null
+  key: boolean
 }
 
 export interface Theme {

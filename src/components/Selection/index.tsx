@@ -103,6 +103,7 @@ export const Selection = memo(() => {
         >
           <Placer>
             <input
+              tabIndex={-1}
               type="checkbox"
               checked={selection.isItemSelected(id) || selection.isAllSelected}
               onChange={() => selection.toggleItemSelection(id)}
@@ -129,6 +130,7 @@ export const Selection = memo(() => {
         >
           <Placer>
             <input
+              tabIndex={-1}
               type="checkbox"
               checked={selection.isItemSelected(id) || selection.isAllSelected}
               onChange={() => selection.toggleItemSelection(id)}
@@ -144,6 +146,7 @@ export const Selection = memo(() => {
     <Wrapper>
       <SelectAll rowHeight={config.rowHeight}>
         <input
+          tabIndex={-1}
           type="checkbox"
           checked={selection.isAllSelected}
           onChange={() => selection.toggleSelectAll()}

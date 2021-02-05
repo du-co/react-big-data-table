@@ -91,18 +91,28 @@ export const Cell: React.FC<Props> = memo(
             ? undefined
             : (e) => {
                 menu.onContextMenu(menuItems)(e)
-                hovered.update({
-                  row: rowId,
-                  column: columnId,
-                })
+                hovered.update(
+                  {
+                    row: rowId,
+                    column: columnId,
+                    key: false,
+                  },
+                  pinnedRow,
+                  pinnedColumn
+                )
               }
         }
         onMouseEnter={useCallback(
           () =>
-            hovered.update({
-              row: rowId,
-              column: columnId,
-            }),
+            hovered.update(
+              {
+                row: rowId,
+                column: columnId,
+                key: false,
+              },
+              pinnedRow,
+              pinnedColumn
+            ),
           [rowId, columnId, hovered]
         )}
         hovered={hovered.row === rowId}

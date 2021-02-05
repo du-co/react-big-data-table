@@ -19,9 +19,6 @@ const Wrapper = styled.div<WrapperProps>`
   &:first-child {
     border-left: none;
   }
-  &:hover {
-    background: ${({ theme }) => theme.backgroundHeaderHover};
-  }
   .resizing & {
     background: ${({ theme }) => theme.backgroundHeader};
   }

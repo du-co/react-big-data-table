@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState, MouseEvent } from 'react'
+import { useRef, useState, MouseEvent } from 'react'
 
-export const useContextMenu = () => {
+export const useContextMenu = (wrapperRef: any) => {
   const menuRef = useRef<HTMLDivElement>((null as unknown) as HTMLDivElement)
   const activeRef = useRef<EventTarget>((null as unknown) as EventTarget)
   const [children, setChildren] = useState(null)
@@ -20,6 +20,9 @@ export const useContextMenu = () => {
       y: e.clientY,
     })
     setChildren(children)
+    window.addEventListener('blur', closeMenu)
+    document.addEventListener('mousedown', closeMenu)
+    document.addEventListener('contextmenu', closeMenu)
   }
 
   const closeMenu = (e?: any) => {
@@ -36,24 +39,16 @@ export const useContextMenu = () => {
       visible: false,
     })
     setChildren(null)
+    wrapperRef.current.focus()
+    window.removeEventListener('blur', closeMenu)
+    document.removeEventListener('mousedown', closeMenu)
+    document.removeEventListener('contextmenu', closeMenu)
   }
 
   const triggerMenuAction = (action: any) => () => {
     action()
     closeMenu()
   }
-
-  useEffect(() => {
-    window.addEventListener('blur', closeMenu)
-    document.addEventListener('mousedown', closeMenu)
-    document.addEventListener('contextmenu', closeMenu)
-    return () => {
-      window.removeEventListener('blur', closeMenu)
-      document.removeEventListener('mousedown', closeMenu)
-      document.removeEventListener('contextmenu', closeMenu)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   return {
     triggerMenuAction,

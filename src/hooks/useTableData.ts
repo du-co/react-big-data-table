@@ -27,13 +27,11 @@ export const useTableData = ({
     () => pinnedColumns.map((c) => utils.find(data.columns, c, 'id')),
     [data.columns, pinnedColumns]
   )
-  const columnData = useMemo(
-    () =>
-      utils
-        .filter(columnOrder, (c) => !pinnedColumns.includes(c))
-        .map((c) => utils.find(data.columns, c, 'id')),
-    [data.columns, columnOrder, pinnedColumns]
-  )
+  const columnData = useMemo(() => columnOrder.map((c) => utils.find(data.columns, c, 'id')), [
+    data.columns,
+    columnOrder,
+    pinnedColumns,
+  ])
 
   return {
     pinnedRows: pinnedRowData,
