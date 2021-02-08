@@ -18,6 +18,7 @@ import {
   useSelection,
   useContextMenu,
   useHovers,
+  useShortcuts,
 } from './hooks'
 import { BigDataTableProps } from './types'
 import defaultTheme from './theme'
@@ -80,9 +81,10 @@ const BigDataTable: React.FC<BigDataTableProps> = memo(
       pinnedRows,
       pinnedColumns,
       columnOrder,
-      transformedData.rows,
-      wrapperRef
+      transformedData.rows
     )
+
+    const { onKeyDown } = useShortcuts(config.shortcuts, handleStep, hovered, selection, wrapperRef)
 
     const [scroll, updateScroll] = useState(DEFAULT_SCROLL_STATE)
 
@@ -176,7 +178,7 @@ const BigDataTable: React.FC<BigDataTableProps> = memo(
                       <Wrapper
                         ref={wrapperRef}
                         tabIndex={0}
-                        onKeyDown={handleStep}
+                        onKeyDown={onKeyDown}
                         onFocus={() => wrapperRef.current.classList.add('active')}
                         onBlur={() => wrapperRef.current.classList.remove('active')}
                       >

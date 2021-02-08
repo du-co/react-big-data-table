@@ -10,15 +10,11 @@ interface State extends HoverState {
   }
 }
 
-let timeout: any
-let scrolling = false
-
 export const useHovers = (
   pinnedRows: ID[],
   pinnedColumns: ID[],
   columnOrder: ID[],
-  rowData: RowData[],
-  wrapperRef: any
+  rowData: RowData[]
 ) => {
   const rowOrder = useMemo(() => rowData.map((r) => r.id), [rowData, pinnedRows])
   const columns = pinnedColumns.concat(columnOrder)
@@ -56,60 +52,45 @@ export const useHovers = (
     })
   }
 
-  const handleStep = (e: React.KeyboardEvent) => {
-    if (e.key !== 'Tab') e.preventDefault()
-    if (e.key === 'Tab') return
-    clearTimeout(timeout)
-    if (!scrolling) {
-      scrolling = true
-      wrapperRef.current.classList.add('kill-events')
-      let newRow = hovered.row !== null ? hovered.row : rows[0]
-      let newColumn = hovered.column !== null ? hovered.column : columns[0]
-      let newRowIndex
-      let newColumnIndex
-      switch (e.key) {
-        case 'ArrowDown':
-          newRowIndex = rows.indexOf(hovered.row ?? rows[rows.length]) + 1
-          newRow = newRowIndex > rows.length - 1 ? rows[0] : rows[newRowIndex]
-          break
-        case 'ArrowUp':
-          newRowIndex = rows.indexOf(hovered.row ?? rows[0]) - 1
-          newRow = newRowIndex < 0 ? rows[rows.length - 1] : rows[newRowIndex]
-          break
-        case 'ArrowRight':
-          newColumnIndex = columns.indexOf(hovered.column ?? columns[columns.length]) + 1
-          newColumn = newColumnIndex > columns.length - 1 ? columns[0] : columns[newColumnIndex]
-          break
-        case 'ArrowLeft':
-          newColumnIndex = columns.indexOf(hovered.column ?? columns[0]) - 1
-          newColumn = newColumnIndex < 0 ? columns[columns.length - 1] : columns[newColumnIndex]
-          break
-      }
-
-      const cell = {
-        row: pinnedRows.includes(newRow) ? pinnedRows.indexOf(newRow) : rowOrder.indexOf(newRow),
-        column: pinnedColumns.includes(newColumn)
-          ? pinnedColumns.indexOf(newColumn)
-          : columnOrder.indexOf(newColumn),
-        pinnedRow: pinnedRows.includes(newRow),
-        pinnedColumn: pinnedColumns.includes(newColumn),
-      }
-
-      setHovers({
-        row: newRow,
-        column: newColumn,
-        key: true,
-        cell,
-      })
-
-      setTimeout(() => {
-        scrolling = false
-      }, 50)
+  const handleStep = (key: string) => {
+    let newRow = hovered.row !== null ? hovered.row : rows[0]
+    let newColumn = hovered.column !== null ? hovered.column : columns[0]
+    let newRowIndex
+    let newColumnIndex
+    switch (key) {
+      case 'arrowdown':
+        newRowIndex = rows.indexOf(hovered.row ?? rows[rows.length]) + 1
+        newRow = newRowIndex > rows.length - 1 ? rows[0] : rows[newRowIndex]
+        break
+      case 'arrowup':
+        newRowIndex = rows.indexOf(hovered.row ?? rows[0]) - 1
+        newRow = newRowIndex < 0 ? rows[rows.length - 1] : rows[newRowIndex]
+        break
+      case 'arrowright':
+        newColumnIndex = columns.indexOf(hovered.column ?? columns[columns.length]) + 1
+        newColumn = newColumnIndex > columns.length - 1 ? columns[0] : columns[newColumnIndex]
+        break
+      case 'arrowleft':
+        newColumnIndex = columns.indexOf(hovered.column ?? columns[0]) - 1
+        newColumn = newColumnIndex < 0 ? columns[columns.length - 1] : columns[newColumnIndex]
+        break
     }
 
-    timeout = setTimeout(() => {
-      wrapperRef.current.classList.remove('kill-events')
-    }, 500)
+    const cell = {
+      row: pinnedRows.includes(newRow) ? pinnedRows.indexOf(newRow) : rowOrder.indexOf(newRow),
+      column: pinnedColumns.includes(newColumn)
+        ? pinnedColumns.indexOf(newColumn)
+        : columnOrder.indexOf(newColumn),
+      pinnedRow: pinnedRows.includes(newRow),
+      pinnedColumn: pinnedColumns.includes(newColumn),
+    }
+
+    setHovers({
+      row: newRow,
+      column: newColumn,
+      key: true,
+      cell,
+    })
   }
 
   return {
