@@ -58,7 +58,7 @@ export const useShortcuts = (
           })
         }
         if (modifierConditionsMet) {
-          if (selection.selection.length && key !== ' ') {
+          if (selection.selection.length && key !== ' ' && key !== 'p') {
             if (
               selection.selection.length === 1 ||
               (selection.selection.length > 1 && shortcut.multiple)
