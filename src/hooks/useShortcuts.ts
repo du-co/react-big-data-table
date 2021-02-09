@@ -1,14 +1,18 @@
-import { HoverState, Shortcuts } from '../types'
+import { HoverStateExtended, Shortcuts } from '../types'
 type Stepper = (key: string) => void
 
 let timeout: any
 let pressing = false
 
+const modifiers = ['shift', 'control', 'alt', 'meta']
+
 export const useShortcuts = (
   defaultShortcuts: Shortcuts = {},
   handleStep: Stepper,
-  hovered: HoverState,
+  hovered: HoverStateExtended,
   selection: any,
+  pinColumn: any,
+  pinRow: any,
   wrapperRef: any
 ) => {
   const { row, column } = hovered
@@ -19,10 +23,21 @@ export const useShortcuts = (
         selection.toggleItemSelection(row)
       },
     },
+    p: {
+      modifiers: ['ctrlKey'],
+      handler: ([row], [column], cell, e) => {
+        if (e!.shiftKey) {
+          pinRow(row, !cell!.pinnedRow)()
+        } else {
+          pinColumn(column, !cell!.pinnedColumn)()
+        }
+      },
+    },
   }
   const onKeyDown = (e: React.KeyboardEvent) => {
     const key = e.key.toLocaleLowerCase()
     if (key !== 'Tab') e.preventDefault()
+    if (modifiers.includes(key)) return
     clearTimeout(timeout)
     if (!pressing) {
       pressing = true
@@ -48,10 +63,10 @@ export const useShortcuts = (
               selection.selection.length === 1 ||
               (selection.selection.length > 1 && shortcut.multiple)
             ) {
-              shortcut.handler(selection.selection)
+              shortcut.handler(selection.selection, [], hovered.cell, e)
             }
-          } else if (row && column) {
-            shortcut.handler([row], [column])
+          } else if (row !== null && column !== null) {
+            shortcut.handler([row], [column], hovered.cell, e)
           }
         }
       }

@@ -84,7 +84,15 @@ const BigDataTable: React.FC<BigDataTableProps> = memo(
       transformedData.rows
     )
 
-    const { onKeyDown } = useShortcuts(config.shortcuts, handleStep, hovered, selection, wrapperRef)
+    const { onKeyDown } = useShortcuts(
+      config.shortcuts,
+      handleStep,
+      hovered,
+      selection,
+      pinColumn,
+      pinRow,
+      wrapperRef
+    )
 
     const [scroll, updateScroll] = useState(DEFAULT_SCROLL_STATE)
 

@@ -5,7 +5,6 @@ import { Cell } from '../Cell'
 import { Scrollbar } from '../Scrollbar'
 import { useConfig, useData, useScroll, useView, useHovers } from '../../../../context'
 import { GridProps } from '../../../../types'
-import utils from '../../../../utils'
 
 export const Main: React.FC<GridProps> = memo(
   ({ columns, innerRef, pinned, scrollX, calculateColumnWidth }) => {
@@ -20,7 +19,10 @@ export const Main: React.FC<GridProps> = memo(
       ({ style, columnIndex, rowIndex }) => {
         const row = data.rows[rowIndex]
         const column = columns[columnIndex]
-        const cell = utils.find(row.columns, column.id, 'columnId')
+        const cell = row.columns[column.id]
+        if (!cell) {
+          console.log(rowIndex, columnIndex, row, column)
+        }
         return (
           <Cell
             rowIndex={rowIndex}

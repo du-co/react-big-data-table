@@ -6,7 +6,6 @@ import { Cell } from '../Cell'
 import { Scrollbar } from '../Scrollbar'
 import { useConfig, useData, useScroll, useView, useHovers } from '../../../../context'
 import { GridProps } from '../../../../types'
-import utils from '../../../../utils'
 
 export const Pinned: React.FC<GridProps> = memo(
   ({ columns, innerRef, pinned, scrollX, calculateColumnWidth }) => {
@@ -21,7 +20,7 @@ export const Pinned: React.FC<GridProps> = memo(
       ({ style, columnIndex, rowIndex }) => {
         const row = data.pinnedRows[rowIndex]
         const column = columns[columnIndex]
-        const cell = utils.find(row.columns, column.id, 'columnId')
+        const cell = row.columns[column.id]
         return (
           <Cell
             rowIndex={rowIndex}

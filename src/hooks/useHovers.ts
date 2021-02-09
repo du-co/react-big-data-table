@@ -1,14 +1,5 @@
-import { useMemo, useState } from 'react'
-import { HoverState, RowData, ID } from '../types'
-
-interface State extends HoverState {
-  cell: {
-    row: number | null
-    column: number | null
-    pinnedColumn: boolean
-    pinnedRow: boolean
-  }
-}
+import { useEffect, useMemo, useState } from 'react'
+import { HoverState, HoverStateExtended, RowData, ID } from '../types'
 
 export const useHovers = (
   pinnedRows: ID[],
@@ -20,7 +11,7 @@ export const useHovers = (
   const columns = pinnedColumns.concat(columnOrder)
   const rows = pinnedRows.concat(rowOrder)
 
-  const [hovered, setHovers] = useState<State>({
+  const [hovered, setHovers] = useState<HoverStateExtended>({
     row: null,
     column: null,
     key: false,
@@ -32,9 +23,17 @@ export const useHovers = (
     },
   })
 
+  useEffect(() => {
+    updateHovered({
+      row: hovered.row,
+      column: hovered.column,
+      key: hovered.key,
+    })
+  }, [pinnedColumns, pinnedRows])
+
   const updateHovered = (state: HoverState) => {
     const cell =
-      state.column && state.row
+      state.column !== null && state.row !== null
         ? {
             row: pinnedRows.includes(state.row)
               ? pinnedRows.indexOf(state.row)

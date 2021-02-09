@@ -83,6 +83,7 @@ export const HeaderCell: React.FC<Props> = memo(({ index, children, style, colum
         onClick={view.pin.column(columnId, !pinned)}
         text={pinned ? 'Unpin column' : 'Pin column'}
         key={`pin-column-${columnId}`}
+        shortcut="Ctrl + P"
       />
     )
   }

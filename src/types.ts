@@ -12,13 +12,15 @@ export interface ColumnData {
 }
 
 export interface RowColumnData {
-  columnId: ID
   data: any
+  meta?: unknown
 }
 
 export interface RowData {
   id: ID
-  columns: RowColumnData[]
+  columns: {
+    [key: number]: RowColumnData
+  }
 }
 
 export interface BigDataTableData {
@@ -91,8 +93,11 @@ export type CellRenderer = (_: CellRendererProps) => any
 export type HeaderCellRenderer = (_: HeaderCellRendererProps) => any
 export type Shortcut = {
   multiple?: boolean
-  handler: (rowIds: ID[], columnIds?: ID[]) => void
-  includeInContext?: boolean
+  handler: (rowIds: ID[], columnIds: ID[], hovered?: HoverCell, e?: React.KeyboardEvent) => void
+  context?: {
+    title: string
+    shortcut: string
+  }
   modifiers?: Modifiers[]
 }
 export type Shortcuts = {
@@ -149,6 +154,17 @@ export interface HoverState {
   row: ID | null
   column: ID | null
   key: boolean
+}
+
+export interface HoverCell {
+  row: number | null
+  column: number | null
+  pinnedColumn: boolean
+  pinnedRow: boolean
+}
+
+export interface HoverStateExtended extends HoverState {
+  cell: HoverCell
 }
 
 export interface Theme {
