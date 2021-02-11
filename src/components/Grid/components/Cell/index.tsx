@@ -63,12 +63,32 @@ export const Cell: React.FC<Props> = memo(
 
     const menuItems = [...customMenuItems]
 
+    if (config.shortcuts) {
+      Object.entries(config.shortcuts)
+        .reverse()
+        .forEach(([key, shortcut], i) => {
+          if (shortcut.context) {
+            menuItems.unshift(
+              <MenuItem
+                divider={i === 0}
+                key={`shortcut-${key}-${rowId}-${columnId}`}
+                onClick={() => shortcut.handler([rowId], [columnId])}
+                text={shortcut.context.title}
+                shortcut={shortcut.context.shortcut}
+              />
+            )
+          }
+        })
+    }
+
     if (!config.disablePinnedRows) {
       menuItems.unshift(
         <MenuItem
           key={`pin-row-${rowId}-${columnId}`}
           onClick={view.pin.row(rowId, !pinnedRow)}
           text={pinnedRow ? 'Unpin row' : 'Pin row'}
+          shortcut="Ctrl + Shift + P"
+          divider
         />
       )
     }
@@ -79,6 +99,8 @@ export const Cell: React.FC<Props> = memo(
           onClick={view.pin.column(columnId, !pinnedColumn)}
           text={pinnedColumn ? 'Unpin column' : 'Pin column'}
           key={`pin-column-${rowId}-${columnId}`}
+          divider={config.disablePinnedRows}
+          shortcut="Ctrl + P"
         />
       )
     }

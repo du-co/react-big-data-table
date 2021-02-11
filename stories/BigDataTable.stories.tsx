@@ -2,18 +2,27 @@ import React from 'react'
 import { Meta, Story } from '@storybook/react'
 import BigDataTable, { BigDataTableProps, MenuItem } from '../src'
 
+const columns = 100
+const rows = 1000
+
 const rowData = (rowId: number) =>
-  Array.from(Array(500)).map((_, i) => ({
-    columnId: i,
-    data: `Row ${rowId}, Column ${i}`,
-  }))
+  Array.from(Array(columns))
+    .map((_, i) => i)
+    .reduce((acc, curr) => {
+      return {
+        ...acc,
+        [curr]: {
+          data: `Row ${rowId}, Column ${curr}`,
+        },
+      }
+    }, {})
 
 const data = {
-  columns: Array.from(Array(500)).map((_, i) => ({
+  columns: Array.from(Array(columns)).map((_, i) => ({
     id: i,
     key: `Column ${i}`,
   })),
-  rows: Array.from(Array(5000)).map((_, i) => ({
+  rows: Array.from(Array(rows)).map((_, i) => ({
     id: i,
     columns: rowData(i),
   })),
@@ -26,6 +35,8 @@ const meta: Meta = {
     controls: { expanded: false },
   },
 }
+
+console.log(data)
 
 export default meta
 
@@ -54,11 +65,24 @@ const Template: Story<BigDataTableProps> = () => (
       rowHeight={30}
       defaultColumnWidth={150}
       defaultView={{
-        pinnedRows: [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 50, 51, 52, 56, 57, 58, 59, 60],
-        pinnedColumns: [3, 4, 5, 8, 6, 20, 43, 25, 60, 45, 50, 51, 52, 53, 71, 72, 74, 75],
+        pinnedRows: [0, 1, 2, 3, 4, 5],
+        pinnedColumns: [0, 1, 2, 3, 4, 5],
         columnOrder: data.columns.map((c) => c.id).sort(() => Math.random() - 0.5),
         columnSizes: {
-          4: 300,
+          0: 200,
+        },
+      }}
+      shortcuts={{
+        c: {
+          modifiers: ['ctrlKey'],
+          context: {
+            title: 'Copy Cell',
+            shortcut: 'Ctrl + C',
+          },
+          handler: ([row], [column]) => {
+            const cell = data.rows[row].columns[column]
+            console.log(cell.data)
+          },
         },
       }}
     />

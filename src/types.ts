@@ -12,13 +12,15 @@ export interface ColumnData {
 }
 
 export interface RowColumnData {
-  columnId: ID
   data: any
+  meta?: unknown
 }
 
 export interface RowData {
   id: ID
-  columns: RowColumnData[]
+  columns: {
+    [key: number]: RowColumnData
+  }
 }
 
 export interface BigDataTableData {
@@ -85,9 +87,22 @@ export interface HeaderCellRendererProps
   key: string
 }
 
+export type Modifiers = 'ctrlKey' | 'altKey' | 'shiftKey' | 'metaKey'
 export type ContextMenuRenderer = (_: ContextMenuRendererProps) => JSX.Element[]
 export type CellRenderer = (_: CellRendererProps) => any
 export type HeaderCellRenderer = (_: HeaderCellRendererProps) => any
+export type Shortcut = {
+  multiple?: boolean
+  handler: (rowIds: ID[], columnIds: ID[], hovered?: HoverCell, e?: React.KeyboardEvent) => void
+  context?: {
+    title: string
+    shortcut: string
+  }
+  modifiers?: Modifiers[]
+}
+export type Shortcuts = {
+  [key: string]: Shortcut
+}
 
 export interface BigDataTableProps {
   disableSelection?: boolean
@@ -105,12 +120,7 @@ export interface BigDataTableProps {
   contextMenuRenderer?: ContextMenuRenderer
   cellRenderer?: CellRenderer
   headerCellRenderer?: HeaderCellRenderer
-  shortcuts?: {
-    [key: string]: {
-      multiple?: boolean
-      handler: (rowId: ID, columnId: ID) => void
-    }
-  }
+  shortcuts?: Shortcuts
   fetchNextPage?: () => void
   defaultView?: BigDataTableDefaultView
 }
@@ -144,6 +154,17 @@ export interface HoverState {
   row: ID | null
   column: ID | null
   key: boolean
+}
+
+export interface HoverCell {
+  row: number | null
+  column: number | null
+  pinnedColumn: boolean
+  pinnedRow: boolean
+}
+
+export interface HoverStateExtended extends HoverState {
+  cell: HoverCell
 }
 
 export interface Theme {

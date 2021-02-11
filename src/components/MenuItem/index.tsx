@@ -20,6 +20,7 @@ const Button = styled.button<{ selected?: boolean; divider?: boolean }>`
   box-sizing: border-box;
   cursor: pointer;
   outline: none;
+  text-align: left;
 
   ${({ theme, selected }) => `
     font-family: ${theme.fontFamily};
@@ -34,7 +35,7 @@ const Button = styled.button<{ selected?: boolean; divider?: boolean }>`
   ${({ theme, divider }) =>
     divider &&
     `
-    border-bottom: 1px solid ${theme.borderColor}
+    border-bottom: 1px solid ${theme.borderColor};
   `}
 `
 const Inner = styled.div`
@@ -46,6 +47,8 @@ const Shortcut = styled.span`
   margin-left: auto;
   padding-left: 1em;
   font-style: italic;
+  text-align: right;
+  white-space: nowrap;
 `
 
 export const MenuItem: React.FC<Props> = memo(({ onClick, text, shortcut, selected, divider }) => {

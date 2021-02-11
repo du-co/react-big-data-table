@@ -23,6 +23,7 @@ const Menu = styled.div<MenuProps>`
   box-shadow: 0 2px 6px 2px rgba(0, 0, 0, 0.15);
   overflow: auto;
   min-width: 200px;
+  max-width: 320px;
   outline: none;
   ${({ x, y, theme }) => `
     top: ${y}px;
@@ -73,6 +74,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = memo(({ children, menuSta
       ref={innerRef}
       tabIndex={menuState.visible ? 0 : -1}
       onKeyDown={handleKeyDown}
+      onContextMenu={(e) => e.preventDefault()}
     >
       <Wrapper>
         {React.Children.map(items, (child, index) => (
